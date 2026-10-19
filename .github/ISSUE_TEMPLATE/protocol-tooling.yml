@@ -1,0 +1,44 @@
+name: Protocol / tooling gap
+description: Report a non-sensitive protocol, reliability, SDK, docs, observability or developer-experience problem.
+title: "[Protocol/Tooling] "
+labels: ["status:triage"]
+body:
+  - type: dropdown
+    id: area
+    attributes:
+      label: Area
+      options:
+        - Protocol
+        - SDK
+        - Developer tooling
+        - Documentation
+        - Observability
+        - Reliability / performance
+        - Other
+    validations:
+      required: true
+  - type: textarea
+    id: impact
+    attributes:
+      label: What useful work is harder or impossible because of this?
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Reproduction / evidence
+    validations:
+      required: true
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Acceptance criteria
+    validations:
+      required: true
+  - type: checkboxes
+    id: security
+    attributes:
+      label: Security check
+      options:
+        - label: This Issue does not disclose an exploitable vulnerability, secret, private key or sensitive infrastructure detail.
+          required: true

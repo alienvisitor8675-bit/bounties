@@ -1,0 +1,151 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Telegraph bounty seed item",
+  "type": "object",
+  "required": [
+    "publish",
+    "title",
+    "work_type",
+    "priority",
+    "why",
+    "acceptance",
+    "reward"
+  ],
+  "properties": {
+    "publish": {
+      "type": "boolean"
+    },
+    "title": {
+      "type": "string",
+      "minLength": 8
+    },
+    "intent": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "work_type": {
+      "enum": [
+        "miner",
+        "evaluator",
+        "app",
+        "protocol",
+        "tooling",
+        "security"
+      ]
+    },
+    "gap_type": {
+      "enum": [
+        "supply",
+        "evaluation",
+        "integration",
+        "quality",
+        "latency",
+        "coverage",
+        "reliability",
+        "tooling",
+        "security"
+      ]
+    },
+    "priority": {
+      "enum": [
+        "p0",
+        "p1",
+        "p2"
+      ]
+    },
+    "missions": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "uniqueItems": true
+    },
+    "why": {
+      "type": "string",
+      "minLength": 20
+    },
+    "current_state": {
+      "type": "string"
+    },
+    "acceptance": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string",
+        "minLength": 8
+      }
+    },
+    "good_first_bounty": {
+      "type": "boolean"
+    },
+    "reward": {
+      "type": "object",
+      "required": [
+        "funded"
+      ],
+      "properties": {
+        "funded": {
+          "type": "boolean"
+        },
+        "amount": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "minimum": 0
+        },
+        "denomination": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "payout_asset": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "max_awards": {
+          "const": 1,
+          "description": "One claim/award per GitHub Issue. Use separate slot Issues for multiple independent implementations."
+        },
+        "eligibility": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "verification_condition": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "payout_window": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "payout_proof": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "conversion_rule": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "minLength": 1
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

@@ -1,0 +1,14 @@
+{
+  "name": "telegraph-bounties",
+  "private": true,
+  "description": "Tooling and tests for the Telegraph Bounties board. Not published to npm.",
+  "license": "MIT",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "test:js": "node tests/test_bounty_workflow.js && node tests/test_stale_claims.js",
+    "test:py": "python -m unittest discover -s tests -p \"test_*.py\"",
+    "test": "npm run test:js && npm run test:py"
+  }
+}

@@ -1,0 +1,230 @@
+[
+  {
+    "id": "exchange",
+    "name": "Exchange",
+    "core_intents": [
+      "SMART_CONTRACT_AUDIT",
+      "SECURITY_REVIEW",
+      "ONCHAIN_METRIC_VERIFY",
+      "TOKEN_TOTAL_SUPPLY_VERIFY",
+      "SANCTIONS_SCREENING_MATCH",
+      "SOCIAL_BOT_DETECTION",
+      "WASH_TRADING_DETECTION",
+      "LIQUIDITY_DEPTH_VERIFY"
+    ]
+  },
+  {
+    "id": "stablecoin",
+    "name": "Stablecoin",
+    "core_intents": [
+      "ASSET_RESERVE_ATTESTATION",
+      "SANCTIONS_SCREENING_MATCH",
+      "FRAUD_RISK",
+      "TRANSACTION_RISK",
+      "LIQUIDITY_DEPTH_VERIFY",
+      "CROSS_CHAIN_STATE_VERIFY",
+      "DOCUMENT_AUTHENTICITY",
+      "VESSEL_TELEMETRY_VERIFY",
+      "FX_NOW",
+      "PAYMENT_METHOD_VERIFY"
+    ]
+  },
+  {
+    "id": "institutional-markets",
+    "name": "Institutional Markets",
+    "core_intents": [
+      "B2B_IDENTITY_ENRICHMENT",
+      "CORPORATE_REGISTRY_LOOKUP",
+      "SANCTIONS_SCREENING_MATCH",
+      "DOCUMENT_AUTHENTICITY",
+      "MACRO_ECONOMIC_INDICATOR",
+      "FX_NOW",
+      "QUESTION_ANSWERING",
+      "WEB_SEARCH_QUERY",
+      "LIQUIDITY_DEPTH_VERIFY"
+    ]
+  },
+  {
+    "id": "legal",
+    "name": "Legal",
+    "core_intents": [
+      "REGULATORY_FILING_MONITOR",
+      "CORPORATE_REGISTRY_LOOKUP",
+      "SANCTIONS_SCREENING_MATCH",
+      "CONTRACT_OBLIGATION_AUDIT",
+      "DOCUMENT_AUTHENTICITY",
+      "WEB_SEARCH_QUERY",
+      "QUESTION_ANSWERING",
+      "FACT_CHECKING"
+    ]
+  },
+  {
+    "id": "conflict-intelligence",
+    "name": "Conflict Intelligence",
+    "core_intents": [
+      "MEDIA_FORENSIC_VERIFY",
+      "SATELLITE_IMAGERY_ANALYSIS",
+      "VESSEL_TELEMETRY_VERIFY",
+      "LIVE_PORT_CONGESTION",
+      "MACRO_ECONOMIC_INDICATOR",
+      "SANCTIONS_SCREENING_MATCH",
+      "WEB_SEARCH_QUERY",
+      "FACT_CHECKING",
+      "WEATHER_FORECAST_VERIFY"
+    ]
+  },
+  {
+    "id": "resources-agriculture",
+    "name": "Resources & Agriculture",
+    "core_intents": [
+      "WEATHER_FORECAST_VERIFY",
+      "SATELLITE_IMAGERY_ANALYSIS",
+      "SENSOR_TELEMETRY_VERIFY",
+      "LIVE_PORT_CONGESTION",
+      "VESSEL_TELEMETRY_VERIFY",
+      "ROUTE_ETA",
+      "SHIP_RATE_ETA",
+      "GRID_POWER_PRICE"
+    ]
+  },
+  {
+    "id": "consumer-platform",
+    "name": "Consumer Platform",
+    "core_intents": [
+      "QUESTION_ANSWERING",
+      "FACT_CHECKING",
+      "MEDIA_FORENSIC_VERIFY",
+      "PRODUCT_AUTHENTICITY",
+      "LIVE_SHELF_PRICE",
+      "SKU_IN_STOCK",
+      "DELIVERY_WINDOW_VERIFY",
+      "LANGUAGE_TRANSLATION",
+      "IMAGE_CAPTIONING",
+      "SOCIAL_BOT_DETECTION",
+      "URL_SAFE"
+    ]
+  },
+  {
+    "id": "commodities",
+    "name": "Commodities",
+    "core_intents": [
+      "SHIP_RATE_ETA",
+      "LIVE_PORT_CONGESTION",
+      "VESSEL_TELEMETRY_VERIFY",
+      "WEATHER_FORECAST_VERIFY",
+      "SANCTIONS_SCREENING_MATCH",
+      "DOCUMENT_AUTHENTICITY",
+      "FX_NOW",
+      "MACRO_ECONOMIC_INDICATOR",
+      "WEB_SEARCH_QUERY"
+    ]
+  },
+  {
+    "id": "personal-agent",
+    "name": "Personal Agent",
+    "core_intents": [
+      "WEB_SEARCH_QUERY",
+      "QUESTION_ANSWERING",
+      "LANGUAGE_TRANSLATION",
+      "TEXT_SUMMARIZATION",
+      "URL_CONTENT_EXTRACTION",
+      "CODE_GENERATION",
+      "TASK_EXECUTION_QUALITY",
+      "B2B_IDENTITY_ENRICHMENT",
+      "FX_NOW",
+      "SHIP_RATE_ETA"
+    ]
+  },
+  {
+    "id": "model-economy",
+    "name": "Model Economy",
+    "core_intents": [
+      "LLM_OUTPUT_EVALUATION",
+      "CODE_REVIEW",
+      "SECURITY_REVIEW",
+      "VULNERABILITY_TRIAGE",
+      "CODE_PATCH_VERIFY",
+      "REGRESSION_VERIFY",
+      "CODE_GENERATION",
+      "QUESTION_ANSWERING",
+      "WEB_SEARCH_QUERY"
+    ]
+  },
+  {
+    "id": "autonomous-systems",
+    "name": "Autonomous Systems",
+    "core_intents": [
+      "IMAGE_CAPTIONING",
+      "SATELLITE_IMAGERY_ANALYSIS",
+      "SENSOR_TELEMETRY_VERIFY",
+      "TASK_EXECUTION_QUALITY",
+      "ROUTE_ETA",
+      "WEATHER_FORECAST_VERIFY",
+      "GRID_POWER_PRICE",
+      "DATACENTER_TELEMETRY_VERIFY",
+      "WAREHOUSE_INVENTORY"
+    ]
+  },
+  {
+    "id": "mining-power",
+    "name": "Mining & Power",
+    "core_intents": [
+      "GRID_POWER_PRICE",
+      "MINING_HASHPRICE_VERIFY",
+      "DATACENTER_TELEMETRY_VERIFY",
+      "SLA_COMPLIANCE",
+      "SENSOR_TELEMETRY_VERIFY",
+      "WEATHER_FORECAST_VERIFY",
+      "VALIDATOR_PERFORMANCE_VERIFY",
+      "ASSET_RESERVE_ATTESTATION",
+      "TRANSACTION_RISK",
+      "MACRO_ECONOMIC_INDICATOR"
+    ]
+  },
+  {
+    "id": "asset-management",
+    "name": "Asset Management",
+    "core_intents": [
+      "CRYPTO_PRICE_LOOKUP",
+      "STOCK_PRICE_QUOTE",
+      "LIQUIDITY_DEPTH_VERIFY",
+      "ASSET_RESERVE_ATTESTATION",
+      "ONCHAIN_METRIC_VERIFY",
+      "WASH_TRADING_DETECTION",
+      "VALIDATOR_PERFORMANCE_VERIFY",
+      "CRYPTO_YIELD_RATE",
+      "CORPORATE_REGISTRY_LOOKUP",
+      "REGULATORY_FILING_MONITOR",
+      "MACRO_ECONOMIC_INDICATOR"
+    ]
+  },
+  {
+    "id": "web3-defi",
+    "name": "Web3 Native & DeFi",
+    "core_intents": [
+      "SMART_CONTRACT_AUDIT",
+      "SECURITY_REVIEW",
+      "VULNERABILITY_TRIAGE",
+      "WASH_TRADING_DETECTION",
+      "EVENT_OUTCOME_RESOLUTION",
+      "ONCHAIN_METRIC_VERIFY",
+      "LIQUIDITY_DEPTH_VERIFY",
+      "CRYPTO_TRANSFER_VERIFY"
+    ]
+  },
+  {
+    "id": "consumer-automation",
+    "name": "Consumer Automation",
+    "core_intents": [
+      "TRAVEL_DISRUPTION",
+      "SLA_COMPLIANCE",
+      "SERVER_UPTIME_MONITOR",
+      "LIVE_SHELF_PRICE",
+      "SKU_IN_STOCK",
+      "URL_SAFE",
+      "PRODUCT_AUTHENTICITY",
+      "COMMERCE_PURCHASE_VERIFY",
+      "DELIVERY_WINDOW_VERIFY"
+    ]
+  }
+]

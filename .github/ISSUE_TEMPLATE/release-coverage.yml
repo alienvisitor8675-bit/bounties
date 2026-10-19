@@ -1,0 +1,71 @@
+name: AI release / market coverage gap
+description: Report a major model, API, agent, tool or dataset release that Telegraph should measure in an existing market.
+title: "[Release] "
+labels: ["source:release", "status:triage"]
+body:
+  - type: input
+    id: release
+    attributes:
+      label: Provider / release
+      description: Name the product, model, API, tool, agent or dataset and the specific version/release.
+      placeholder: e.g. Provider X — Model Y v2
+    validations:
+      required: true
+  - type: input
+    id: source
+    attributes:
+      label: Canonical release source
+      description: Link to the provider's release notes, documentation, repository or announcement.
+      placeholder: https://...
+    validations:
+      required: true
+  - type: input
+    id: intents
+    attributes:
+      label: Relevant existing Intent(s)
+      description: Use existing Telegraph Intent names where possible. If none clearly fit, say "needs Intent triage" rather than inventing one.
+      placeholder: e.g. CODE_GENERATION, CODE_REVIEW
+    validations:
+      required: true
+  - type: dropdown
+    id: missing
+    attributes:
+      label: What is missing?
+      options:
+        - Provider integration / adapter
+        - Evaluator coverage
+        - Intent definition / versioning review
+        - Tooling / SDK / compatibility work
+        - Capacity / reliability work
+        - Multiple pieces / needs triage
+    validations:
+      required: true
+  - type: textarea
+    id: current
+    attributes:
+      label: Current Telegraph coverage
+      description: What already works and what prevents this release from being measured fairly in the relevant market today?
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Evidence that this is a real, time-sensitive coverage gap
+      description: Link the release, show why the existing market applies, and include any reproducible integration/evaluation blocker. Do not invent customer demand or endorsement.
+    validations:
+      required: true
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Observable completion criteria
+      description: Define what would make the release eligible for fair measurement. Do not require a particular rank or winner.
+      placeholder: "Provider is callable through the approved adapter; existing Intent fixtures run; evaluator coverage is valid; ranking can be produced without special-casing the Provider."
+    validations:
+      required: true
+  - type: checkboxes
+    id: terms
+    attributes:
+      label: Access / terms check
+      options:
+        - label: This report does not require bypassing access controls, scraping against terms, publishing credentials, or implying the Provider endorses Telegraph.
+          required: true

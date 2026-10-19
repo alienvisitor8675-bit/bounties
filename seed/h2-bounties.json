@@ -1,0 +1,321 @@
+[
+  {
+    "publish": false,
+    "title": "[H2][Miner] Add competitive supply for SATELLITE_IMAGERY_ANALYSIS",
+    "work_type": "miner",
+    "gap_type": "supply",
+    "priority": "p0",
+    "intent": "SATELLITE_IMAGERY_ANALYSIS",
+    "missions": [
+      "conflict-intelligence",
+      "resources-agriculture",
+      "autonomous-systems"
+    ],
+    "why": "Several H2 application paths may depend on machine-readable satellite analysis. Publish only after live network audit confirms the current supply is insufficient.",
+    "current_state": "VERIFY AGAINST THE LIVE NETWORK BEFORE PUBLISHING. Planning spreadsheets are not live readiness data.",
+    "acceptance": [
+      "Target number of independent live Miners serve the Intent",
+      "Each qualifying Miner succeeds on the approved reference request set",
+      "Paid Telegraph requests complete end-to-end",
+      "Latency and any required app-facing normalization are usable by the affected Apps; Provider-native payloads remain permitted"
+    ],
+    "good_first_bounty": false,
+    "reward": {
+      "funded": false,
+      "amount": null,
+      "denomination": null,
+      "payout_asset": null,
+      "max_awards": 1,
+      "eligibility": null,
+      "verification_condition": null,
+      "payout_window": null,
+      "payout_proof": null
+    }
+  },
+  {
+    "publish": false,
+    "title": "[H2][Evaluator] Strengthen evaluation for SATELLITE_IMAGERY_ANALYSIS",
+    "work_type": "evaluator",
+    "gap_type": "evaluation",
+    "priority": "p0",
+    "intent": "SATELLITE_IMAGERY_ANALYSIS",
+    "missions": [
+      "conflict-intelligence",
+      "resources-agriculture",
+      "autonomous-systems"
+    ],
+    "why": "Publish only if the current evaluation path cannot meaningfully separate useful from weak satellite-analysis Miners for the relevant H2 workloads.",
+    "current_state": "VERIFY LIVE EVALUATION AND RANKING BEFORE PUBLISHING.",
+    "acceptance": [
+      "Evaluator runs on the approved reference fixtures",
+      "Known weak outputs score below reference-quality outputs on hidden checks",
+      "Evaluator is integrated into the ranking path used by Apps",
+      "Evaluation limitations are documented rather than overstated"
+    ],
+    "good_first_bounty": false,
+    "reward": {
+      "funded": false,
+      "amount": null,
+      "denomination": null,
+      "payout_asset": null,
+      "max_awards": 1,
+      "eligibility": null,
+      "verification_condition": null,
+      "payout_window": null,
+      "payout_proof": null
+    }
+  },
+  {
+    "publish": false,
+    "title": "[H2][Miner] Add competitive supply for WEATHER_FORECAST_VERIFY",
+    "work_type": "miner",
+    "gap_type": "supply",
+    "priority": "p0",
+    "intent": "WEATHER_FORECAST_VERIFY",
+    "missions": [
+      "resources-agriculture",
+      "commodities",
+      "autonomous-systems",
+      "mining-power"
+    ],
+    "why": "Weather is reused across several H2 missions. Publish only if live supply is below the target needed for robust competition.",
+    "current_state": "VERIFY LIVE MINER COUNT, QUALITY AND RANKING BEFORE PUBLISHING.",
+    "acceptance": [
+      "Target number of independent Miners are live",
+      "Reference forecasts are consumable through the required App/Alexandria adapter normalization; no universal protocol-level Provider schema is required",
+      "Paid Telegraph requests succeed",
+      "Affected H2 Apps consume the result without a workaround"
+    ],
+    "good_first_bounty": true,
+    "reward": {
+      "funded": false,
+      "amount": null,
+      "denomination": null,
+      "payout_asset": null,
+      "max_awards": 1,
+      "eligibility": null,
+      "verification_condition": null,
+      "payout_window": null,
+      "payout_proof": null
+    }
+  },
+  {
+    "publish": false,
+    "title": "[H2][Miner] Add competitive supply for SANCTIONS_SCREENING_MATCH",
+    "work_type": "miner",
+    "gap_type": "supply",
+    "priority": "p1",
+    "intent": "SANCTIONS_SCREENING_MATCH",
+    "missions": [
+      "exchange",
+      "stablecoin",
+      "institutional-markets",
+      "legal",
+      "conflict-intelligence",
+      "commodities"
+    ],
+    "why": "This Intent is used by six H2 missions, the most of any Intent in the catalogue, so thin supply would block several Apps at once. Publish only if live supply is below the target needed for robust competition.",
+    "current_state": "VERIFY LIVE MINER COUNT, QUALITY AND RANKING BEFORE PUBLISHING. Catalogue reuse is a coordination map, not live demand.",
+    "acceptance": [
+      "Target number of independent live Miners serve the Intent (target set by maintainers at publish time)",
+      "Each qualifying Miner returns correct matches and non-matches on the approved reference set, including both listed and clean entities",
+      "Responses meet the Intent's latency target (< 500ms)",
+      "Paid Telegraph requests complete end-to-end",
+      "Affected H2 Apps consume the result without a workaround; Provider-native payloads remain permitted"
+    ],
+    "good_first_bounty": false,
+    "reward": {
+      "funded": false,
+      "amount": null,
+      "denomination": null,
+      "payout_asset": null,
+      "max_awards": 1,
+      "eligibility": null,
+      "verification_condition": null,
+      "payout_window": null,
+      "payout_proof": null
+    }
+  },
+  {
+    "publish": false,
+    "title": "[H2][Miner] Add competitive supply for MACRO_ECONOMIC_INDICATOR",
+    "work_type": "miner",
+    "gap_type": "supply",
+    "priority": "p1",
+    "intent": "MACRO_ECONOMIC_INDICATOR",
+    "missions": [
+      "institutional-markets",
+      "conflict-intelligence",
+      "commodities",
+      "mining-power",
+      "asset-management"
+    ],
+    "why": "Used by five H2 missions. The task is deterministic and checkable against official releases, which makes it a good entry point. Publish only if live supply is below the target.",
+    "current_state": "VERIFY LIVE MINER COUNT, QUALITY AND RANKING BEFORE PUBLISHING. Catalogue reuse is a coordination map, not live demand.",
+    "acceptance": [
+      "Target number of independent live Miners serve the Intent (target set by maintainers at publish time)",
+      "Each qualifying Miner matches official published values (policy rates, CPI, unemployment) on the approved reference dates",
+      "Responses meet the Intent's latency target (< 2s)",
+      "Paid Telegraph requests complete end-to-end",
+      "Affected H2 Apps consume the result without a workaround; Provider-native payloads remain permitted"
+    ],
+    "good_first_bounty": true,
+    "reward": {
+      "funded": false,
+      "amount": null,
+      "denomination": null,
+      "payout_asset": null,
+      "max_awards": 1,
+      "eligibility": null,
+      "verification_condition": null,
+      "payout_window": null,
+      "payout_proof": null
+    }
+  },
+  {
+    "publish": false,
+    "title": "[H2][Miner] Add competitive supply for FX_NOW",
+    "work_type": "miner",
+    "gap_type": "supply",
+    "priority": "p2",
+    "intent": "FX_NOW",
+    "missions": [
+      "stablecoin",
+      "institutional-markets",
+      "commodities",
+      "personal-agent"
+    ],
+    "why": "Used by four H2 missions. The task is deterministic with a low verification burden, so it suits a first contribution. Publish only if live supply is below the target.",
+    "current_state": "VERIFY LIVE MINER COUNT, QUALITY AND RANKING BEFORE PUBLISHING. Catalogue reuse is a coordination map, not live demand.",
+    "acceptance": [
+      "Target number of independent live Miners serve the Intent (target set by maintainers at publish time)",
+      "Each qualifying Miner returns mid-market rates within the approved tolerance of the reference sources on the approved reference pairs",
+      "Responses meet the Intent's latency target (< 200ms)",
+      "Paid Telegraph requests complete end-to-end",
+      "Affected H2 Apps consume the result without a workaround; Provider-native payloads remain permitted"
+    ],
+    "good_first_bounty": true,
+    "reward": {
+      "funded": false,
+      "amount": null,
+      "denomination": null,
+      "payout_asset": null,
+      "max_awards": 1,
+      "eligibility": null,
+      "verification_condition": null,
+      "payout_window": null,
+      "payout_proof": null
+    }
+  },
+  {
+    "publish": false,
+    "title": "[H2][Evaluator] Contribute a scoring adapter for AI & Machine Learning Intents",
+    "work_type": "evaluator",
+    "gap_type": "evaluation",
+    "priority": "p1",
+    "intent": null,
+    "missions": [
+      "autonomous-systems",
+      "commodities",
+      "conflict-intelligence",
+      "consumer-platform",
+      "institutional-markets",
+      "legal",
+      "model-economy",
+      "personal-agent"
+    ],
+    "why": "The catalogue marks many Intents in this Category as needing a Category-level scoring adapter. One adapter can serve compatible Intents, while qualification and Miner Rankings stay per Intent. Publish only after maintainers confirm the need privately; do not name specific weak Intents here.",
+    "current_state": "VERIFY AGAINST LIVE EVALUATION STATE BEFORE PUBLISHING. Keep Intent-specific findings in the private review channel.",
+    "acceptance": [
+      "Adapter builds to WASM and runs through the approved evaluator interface on the public reference fixtures",
+      "Adapter states which Intents it is compatible with and the task requirements it assumes",
+      "A second reviewer rebuilds it and reproduces identical scores",
+      "Known-weak outputs score below reference-quality outputs on the public fixtures, and limitations are documented rather than overstated",
+      "No Provider-specific scoring exception is introduced",
+      "Submitted through V2 admission and qualification; a GitHub merge alone does not change Canonical Evaluator state"
+    ],
+    "good_first_bounty": false,
+    "reward": {
+      "funded": false,
+      "amount": null,
+      "denomination": null,
+      "payout_asset": null,
+      "max_awards": 1,
+      "eligibility": null,
+      "verification_condition": null,
+      "payout_window": null,
+      "payout_proof": null
+    }
+  },
+  {
+    "publish": false,
+    "title": "[H2][Evaluator] Contribute evaluation material for AI & Machine Learning Intents",
+    "work_type": "evaluator",
+    "gap_type": "evaluation",
+    "priority": "p2",
+    "intent": null,
+    "missions": [
+      "autonomous-systems",
+      "commodities",
+      "conflict-intelligence",
+      "consumer-platform",
+      "institutional-markets",
+      "legal",
+      "model-economy",
+      "personal-agent"
+    ],
+    "why": "Evaluation needs independently supported references and task examples. Publish only after maintainers confirm the need privately; do not name specific Intents, counts or coverage gaps here.",
+    "current_state": "VERIFY AGAINST LIVE EVALUATION STATE BEFORE PUBLISHING. Keep Intent-specific findings in the private review channel.",
+    "acceptance": [
+      "Material matches the actual scope of the target Intents, not just the Category vocabulary",
+      "References come from independent sources with provenance recorded; synthetic labels are marked as synthetic",
+      "Material is fresh enough for the task and reproducible by a reviewer from the cited sources",
+      "Hidden qualification material is never posted to GitHub; it is submitted through the V2 admission channel",
+      "A passing schema check is not treated as proof that labels are correct"
+    ],
+    "good_first_bounty": false,
+    "reward": {
+      "funded": false,
+      "amount": null,
+      "denomination": null,
+      "payout_asset": null,
+      "max_awards": 1,
+      "eligibility": null,
+      "verification_condition": null,
+      "payout_window": null,
+      "payout_proof": null
+    }
+  },
+  {
+    "publish": false,
+    "title": "[H2][App] Build a reference App for the Exchange mission",
+    "work_type": "app",
+    "gap_type": "integration",
+    "priority": "p1",
+    "intent": null,
+    "missions": [
+      "exchange"
+    ],
+    "why": "Missions define what must work. A working reference App shows which Intents block a real workflow and exposes gaps the catalogue cannot. Publish only if no suitable Exchange App exists.",
+    "current_state": "VERIFY WHETHER AN EXCHANGE APP ALREADY EXISTS BEFORE PUBLISHING.",
+    "acceptance": [
+      "App makes live paid Telegraph requests for the number of the mission's core Intents that maintainers set at publish time",
+      "Request IDs and receipts are shown for each request",
+      "The App consumes the results in a continuous workflow with no manual copy-paste steps",
+      "Any blocking Intent gap found is reported as its own gap report instead of being worked around silently",
+      "A public repository with a README lets a reviewer reproduce the run"
+    ],
+    "good_first_bounty": false,
+    "reward": {
+      "funded": false,
+      "amount": null,
+      "denomination": null,
+      "payout_asset": null,
+      "max_awards": 1,
+      "eligibility": null,
+      "verification_condition": null,
+      "payout_window": null,
+      "payout_proof": null
+    }
+  }
+]

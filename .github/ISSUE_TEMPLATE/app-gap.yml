@@ -1,0 +1,42 @@
+name: App / Agent integration gap
+description: Report something preventing a real App or Agent from using Telegraph end-to-end.
+title: "[App] "
+labels: ["work:app", "gap:integration", "status:triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        **Public-safe report only.** Do not publish a private customer/Anjoman job, user files, private request IDs, secrets, customer budgets, internal evaluations, hidden test answers, precise evaluator weaknesses or exploitable infrastructure details. Give only authorized, sanitized reproduction evidence. Maintainers review specifics privately.
+  - type: input
+    id: app
+    attributes:
+      label: App / mission / integration
+      placeholder: e.g. Season II — Consumer Automation
+    validations:
+      required: true
+  - type: textarea
+    id: outcome
+    attributes:
+      label: What is supposed to work?
+      description: Describe the end-to-end outcome, not just the technical symptom.
+    validations:
+      required: true
+  - type: textarea
+    id: blocker
+    attributes:
+      label: What blocks it?
+      description: Describe the reusable blocker broadly; do not expose private routing/evaluation/security diagnostics.
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Public-safe evidence / reproduction
+    validations:
+      required: true
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: What observable result would make the App unblocked?
+    validations:
+      required: true

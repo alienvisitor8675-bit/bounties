@@ -1,0 +1,17 @@
+.DS_Store
+Thumbs.db
+__pycache__/
+*.pyc
+.env
+.venv/
+node_modules/
+
+# Never commit internal node/indexer evaluation observations, private profiles or publication credentials.
+.private-evaluation/
+private-evaluation/
+*internal-evaluation*.json
+*internal-evaluation*.ndjson
+*.evaluation-state.ndjson
+*.private-profiles.json
+*publication-key*
+*approval-private*.json

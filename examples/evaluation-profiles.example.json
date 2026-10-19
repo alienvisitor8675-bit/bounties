@@ -1,0 +1,26 @@
+[
+  {
+    "id": "weather-forecast-hourly-v1",
+    "category_id": "weather-intelligence",
+    "adapter_id": "weather-wasm-v1",
+    "material_schema": "Forecast time, location, horizon, predicted quantity, reference observation, units and provenance",
+    "reference_evidence": "Independent timestamped observations matching the location, horizon and measured variable; source authorization verified separately",
+    "min_eligible_items": 50,
+    "min_fresh_items": 25,
+    "min_source_domains": 2,
+    "max_material_age_hours": 72,
+    "min_case_coverage": 0.9
+  },
+  {
+    "id": "code-execution-v1",
+    "category_id": "software-engineering",
+    "adapter_id": "code-execution-wasm-v1",
+    "material_schema": "Problem, constraints, executable tests, deterministic expected behavior and scoring environment",
+    "reference_evidence": "Reproducible independent execution and test artifacts; exercise hidden and edge cases",
+    "min_eligible_items": 20,
+    "min_fresh_items": 5,
+    "min_source_domains": 1,
+    "max_material_age_hours": 168,
+    "min_case_coverage": 0.95
+  }
+]

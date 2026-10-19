@@ -1,0 +1,45 @@
+name: Public-safe missing capability / customer need
+# This is a proposal, not a bounty, payment commitment or production capability announcement.
+description: Propose a reusable missing capability using only information approved for public disclosure.
+title: "[Capability] "
+labels: ["status:triage", "reward:unfunded"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        This is a **public GitHub Issue**, not a private Anjoman job inbox. Do NOT paste customer identities, job prompts/files, credentials, budgets, contracts, payment records, hidden evaluator cases, per-Intent evaluation weaknesses or private diagnostics. Private needs must be reviewed/sanitized before publishing. No reward, demand commitment or new Intent is implied.
+  - type: textarea
+    id: outcome
+    attributes:
+      label: Public-safe outcome or missing capability
+      description: Explain the reusable task at a broad level; do not identify private customers or unpublished internal measurements.
+    validations:
+      required: true
+  - type: input
+    id: existing_intent
+    attributes:
+      label: Related existing Intent (if known)
+      description: Reuse an existing task where possible; leave blank if the right market needs review.
+    validations:
+      required: false
+  - type: textarea
+    id: public_evidence
+    attributes:
+      label: Publicly shareable evidence
+      description: Cite a public source, test with synthetic inputs or generic technical reproduction. Mark fictional examples. Do not claim a signed buyer or funded reward unless independently approved.
+    validations:
+      required: true
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Safe observable outcome / acceptance outline
+      description: What would show useful completion without disclosing proprietary requests or evaluation attacks? Maintainers verify exact details privately where needed.
+    validations:
+      required: true
+  - type: checkboxes
+    id: disclosure
+    attributes:
+      label: Public disclosure confirmation
+      options:
+        - label: I confirm this report is safe to disclose publicly, and does not include unapproved customer/job information or hidden evaluation/security details.
+          required: true

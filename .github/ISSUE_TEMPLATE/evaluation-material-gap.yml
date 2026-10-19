@@ -1,0 +1,38 @@
+name: Evaluation contribution opportunity (public / nonsensitive)
+description: Propose broad Category-level evaluation work. Never publish detailed Intent vulnerabilities or coverage metrics.
+title: "[Evaluation] "
+labels: ["work:evaluator", "gap:evaluation", "status:triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        **Public-safe form only.** Do not include vulnerable Intent IDs, exact missing-case distributions, material/quality counters, private evidence URLs, hidden samples, reference answers, qualification thresholds, personal/customer data or exploit details. Send sensitive specifics privately using SECURITY.md.
+  - type: input
+    id: category
+    attributes:
+      label: Public Category
+      description: Identify a broadly supported Category, not an exploitable Intent-specific weakness.
+      placeholder: e.g. weather-intelligence
+    validations:
+      required: true
+  - type: textarea
+    id: contribution
+    attributes:
+      label: Public contribution proposal
+      description: Describe only a general, safe-to-share contribution (e.g. evaluation references or methodology). No exact deficits or hidden sources.
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Nonsensitive proof or examples
+      description: Optional published documentation or generic example. Privately share sensitive details with maintainers, not GitHub Issues.
+    validations:
+      required: false
+  - type: textarea
+    id: public_acceptance
+    attributes:
+      label: Public acceptance outline
+      description: State safe, general outcomes; maintainers will confirm exact criteria in an authorized private review before opening a claimable bounty.
+    validations:
+      required: true

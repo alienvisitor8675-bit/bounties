@@ -1,0 +1,160 @@
+#!/usr/bin/env python3
+import json, os, shutil, subprocess, sys
+from pathlib import Path
+
+for _stream in (sys.stdout, sys.stderr):
+    if hasattr(_stream, 'reconfigure'):
+        _stream.reconfigure(encoding='utf-8')
+
+ROOT=Path(__file__).resolve().parent
+INTENTS=json.loads((ROOT/'catalog/intents.json').read_text(encoding='utf-8'))
+MISSIONS=json.loads((ROOT/'catalog/missions.json').read_text(encoding='utf-8'))
+I_BY_NAME={x['name']:x for x in INTENTS}
+M_BY_ID={x['id']:x for x in MISSIONS}
+M_NAME={x['id']:x['name'] for x in MISSIONS}
+
+
+def usage(code=0):
+    print('''Telegraph Bounties CLI\n\nUsage:\n  ./tb map\n  ./tb mission <id-or-name>\n  ./tb intent <intent-or-fragment>\n  ./tb search <term>\n  ./tb next\n  ./tb needs <opportunities.json>\n  ./tb claim <issue>\n  ./tb progress <issue> <message>\n  ./tb release <issue>\n  ./tb submit <issue> <proof>\n  ./tb doctor\n''')
+    raise SystemExit(code)
+
+
+def find_mission(q):
+    q=q.lower()
+    exact=[m for m in MISSIONS if m['id'].lower()==q or m['name'].lower()==q]
+    if exact: return exact[0]
+    matches=[m for m in MISSIONS if q in m['id'].lower() or q in m['name'].lower()]
+    if len(matches)==1: return matches[0]
+    if not matches:
+        print('No mission matched. Try ./tb map'); return None
+    print('Multiple missions matched:')
+    for m in matches: print(' ',m['id'],'—',m['name'])
+    return None
+
+
+def find_intent(q):
+    q=q.upper()
+    if q in I_BY_NAME: return I_BY_NAME[q]
+    matches=[x for x in INTENTS if q in x['name'].upper() or q.lower() in x['description'].lower()]
+    if len(matches)==1: return matches[0]
+    if not matches:
+        print('No Intent matched. Try ./tb search <term>'); return None
+    print('Multiple Intents matched:')
+    for x in matches[:30]: print(' ',x['name'],'—',x['description'])
+    if len(matches)>30: print(f'  ... and {len(matches)-30} more')
+    return None
+
+
+def gh(*args, capture=False):
+    if not shutil.which('gh'):
+        print('GitHub CLI is not installed. Install gh first.'); raise SystemExit(2)
+    cmd=['gh',*map(str,args)]
+    if capture:
+        return subprocess.check_output(cmd,text=True)
+    raise SystemExit(subprocess.call(cmd))
+
+args=sys.argv[1:]
+if not args or args[0] in {'help','-h','--help'}: usage()
+cmd=args[0]
+
+if cmd=='map':
+    print(f'{len(INTENTS)} Intents · {len(MISSIONS)} H2 missions\n')
+    for i,m in enumerate(MISSIONS,1):
+        print(f'{i:02d}. {m["name"]:<24} {len(m["core_intents"]):>2} core Intents  ({m["id"]})')
+    raise SystemExit()
+
+if cmd=='mission':
+    if len(args)<2: usage(2)
+    m=find_mission(' '.join(args[1:]));
+    if not m: raise SystemExit(1)
+    print(f'{m["name"]}  [{m["id"]}]')
+    print('\nCore starting Intents:')
+    for name in m['core_intents']:
+        x=I_BY_NAME.get(name,{})
+        print(f'  {name:<34} {x.get("category","")}')
+    print('\nApps may compose any relevant Intent; this is a coordination baseline, not a whitelist.')
+    raise SystemExit()
+
+if cmd=='intent':
+    if len(args)<2: usage(2)
+    x=find_intent(' '.join(args[1:]));
+    if not x: raise SystemExit(1)
+    print(x['name'])
+    print(f"Category: {x['category']} · Tier: {x['tier']} · Class: {x['class']} · Priority: {x['priority_score']}")
+    print(f"Target latency: {x.get('target_latency') or '—'} · Scoring: {x.get('scoring_path') or '—'}")
+    print('\n'+x['description'])
+    mids=x.get('used_by_missions',[])
+    print('\nUsed by H2 missions: '+(', '.join(M_NAME[m] for m in mids) if mids else 'none in the starting map'))
+    raise SystemExit()
+
+if cmd=='search':
+    if len(args)<2: usage(2)
+    q=' '.join(args[1:]).lower()
+    matches=[]
+    for x in INTENTS:
+        hay=' '.join(str(x.get(k,'')) for k in ('name','category','description','class')).lower()
+        if q in hay: matches.append(x)
+    if not matches:
+        print('No matches.'); raise SystemExit(1)
+    for x in matches[:50]:
+        mids=x.get('used_by_missions',[])
+        print(f"{x['name']:<34} {x['category']:<28} missions={len(mids)}")
+    if len(matches)>50: print(f'... and {len(matches)-50} more')
+    raise SystemExit()
+
+if cmd=='needs':
+    if len(args)!=2: usage(2)
+    sys.path.insert(0, str(ROOT/'scripts'))
+    from evaluation_publication import validate_public_export
+    try:
+        result=json.loads(Path(args[1]).read_text(encoding='utf-8'))
+        public=validate_public_export(result)
+    except (OSError,ValueError,TypeError,KeyError):
+        print('Cannot read approved public opportunity format. Internal evaluation exports are not supported.'); raise SystemExit(2)
+    print(f"{len(public)} public Category-level evaluation opportunities (unfunded review candidates only)\n")
+    for item in public[:30]:
+        print(f"{item['id']} | {item['category_id']} | Evaluation contributions | status:triage")
+    if len(public)>30:
+        print(f'... and {len(public)-30} more public Categories')
+    raise SystemExit()
+
+if cmd=='next':
+    if not shutil.which('gh'):
+        print('Install/authenticate GitHub CLI for live bounty listing. Static catalogue still works with ./tb map/search/intent.'); raise SystemExit(2)
+    try:
+        raw=gh('issue','list','--state','open','--label','status:open','--limit','100','--json','number,title,labels,url',capture=True)
+        issues=json.loads(raw)
+    except Exception:
+        print('Could not read Issues. Run: gh auth login'); raise SystemExit(2)
+    def pri(it):
+        labels={x['name'] for x in it['labels']}
+        return (0 if 'priority:p0' in labels else 1 if 'priority:p1' in labels else 2, 0 if 'good first bounty' in labels else 1, it['number'])
+    issues=[it for it in issues if 'opportunity:provider' not in {x['name'] for x in it['labels']}]
+    issues.sort(key=pri)
+    if not issues: print('No open claimable bounties.'); raise SystemExit()
+    for it in issues[:25]:
+        labels={x['name'] for x in it['labels']}
+        p='P0' if 'priority:p0' in labels else 'P1' if 'priority:p1' in labels else 'P2'
+        first=' · GOOD FIRST' if 'good first bounty' in labels else ''
+        print(f"#{it['number']:<4} {p}{first:<13} {it['title']}\n      {it['url']}")
+    raise SystemExit()
+
+if cmd in {'claim','release'}:
+    if len(args)!=2: usage(2)
+    gh('issue','comment',args[1],'--body','/'+cmd)
+
+if cmd in {'progress','submit'}:
+    if len(args)<3: usage(2)
+    gh('issue','comment',args[1],'--body','/'+cmd+' '+' '.join(args[2:]))
+
+if cmd=='doctor':
+    print('Python:',sys.version.split()[0])
+    print('Repo data:',f'{len(INTENTS)} Intents / {len(MISSIONS)} missions')
+    print('gh:',shutil.which('gh') or 'not installed')
+    if shutil.which('gh'):
+        p=subprocess.run(['gh','auth','status'],stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL)
+        print('gh auth:','ok' if p.returncode==0 else 'not authenticated')
+    p=subprocess.run([sys.executable,str(ROOT/'scripts/validate_catalog.py')])
+    raise SystemExit(p.returncode)
+
+usage(2)

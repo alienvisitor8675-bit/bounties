@@ -1,0 +1,30 @@
+name: Evaluator development opportunity (public / nonsensitive)
+description: Suggest reusable evaluation work for a broad Category without publishing specific ranking weaknesses.
+title: "[Evaluator] "
+labels: ["work:evaluator", "gap:evaluation", "status:triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        **Public-safe form only.** Do not identify exploitable evaluation blind spots, stale tests, source concentrations, hidden cases, per-Intent weaknesses, credentials or customer data. Sensitive details belong in a private report per SECURITY.md.
+  - type: input
+    id: category
+    attributes:
+      label: Public Category
+      description: A reusable task family, not a vulnerable Intent ID.
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Suggested general improvement
+      description: Describe an evaluation methodology, robust independent verification tool, or Category-compatible adapter improvement at a nonsensitive level.
+    validations:
+      required: true
+  - type: textarea
+    id: public_acceptance
+    attributes:
+      label: Safe public acceptance outline
+      description: General reproducible outcomes only. Maintainers will agree privately on specific targets and validation details.
+    validations:
+      required: true

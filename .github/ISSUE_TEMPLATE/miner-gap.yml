@@ -1,0 +1,39 @@
+name: Miner / intelligence-supply gap
+description: Report missing, weak or insufficiently competitive supply for an Intent.
+title: "[Miner] "
+labels: ["work:miner", "gap:supply", "status:triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        **Public-safe report only.** Do not publish a private customer/Anjoman job, user files, private request IDs, secrets, customer budgets, internal evaluations, hidden test answers, precise evaluator weaknesses or exploitable infrastructure details. Give only authorized, sanitized reproduction evidence. Maintainers review specifics privately.
+  - type: input
+    id: intent
+    attributes:
+      label: Intent
+      description: Use the canonical Intent name if one already exists.
+      placeholder: e.g. WEATHER_FORECAST_VERIFY
+    validations:
+      required: true
+  - type: textarea
+    id: blocked
+    attributes:
+      label: What real demand is blocked or degraded?
+      description: Describe only the approved public outcome or broad need. Do not name a customer or private job without permission.
+      placeholder: "Resources & Agriculture app cannot complete because..."
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Evidence
+      description: Only safe public evidence; no private request IDs, internal ranking diagnostics or detailed evaluator failure patterns.
+    validations:
+      required: true
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: What observable result would close the gap?
+      description: Public-safe observable outcome. Sensitive acceptance tests are reviewed privately.
+    validations:
+      required: true
