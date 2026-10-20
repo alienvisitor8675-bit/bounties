@@ -14,11 +14,13 @@ checks = [
     [sys.executable, str(ROOT / 'scripts/validate_catalog.py')],
     [sys.executable, str(ROOT / 'scripts/generate_docs.py'), '--check'],
     ['node', '--check', str(ROOT / 'scripts/bounty_state.js')],
+    ['node', '--check', str(ROOT / 'scripts/bounty_journal.js')],
     ['node', '--check', str(ROOT / 'scripts/bounty_commands.js')],
     ['node', '--check', str(ROOT / 'scripts/stale_claims.js')],
     ['node', str(ROOT / 'tests/test_bounty_workflow.js')],
     ['node', str(ROOT / 'tests/test_stale_claims.js')],
     [sys.executable, str(ROOT / 'tests/test_reward_validation.py')],
+    [sys.executable, str(ROOT / 'tests/test_repository_security.py')],
     [sys.executable, str(ROOT / 'tests/test_demand_guardrails.py')],
     [sys.executable, str(ROOT / 'tests/test_live_launch_check.py')],
     [sys.executable, str(ROOT / 'tests/test_release_coverage.py')],
@@ -34,13 +36,17 @@ python_scripts = sorted((ROOT / 'scripts').glob('*.py'))
 run([sys.executable, '-m', 'py_compile', *map(str, python_scripts)])
 
 # Shell syntax is part of the launch surface as well.
-for shell in sorted((ROOT / 'scripts').glob('*.sh')):
-    run(['bash', '-n', str(shell)])
+if sys.platform != 'win32':
+    for shell in sorted((ROOT / 'scripts').glob('*.sh')):
+        run(['bash', '-n', str(shell)])
 
 required = [
     'README.md', 'LICENSE', 'SECURITY.md', 'GOVERNANCE.md', 'SUPPORT.md', 'CODE_OF_CONDUCT.md',
     'docs/README.md', 'docs/GLOSSARY.md', 'docs/maintainers/README.md', 'docs/maintainers/LAUNCH.md', 'docs/maintainers/PUBLISH.md', 'docs/maintainers/REPO_SETTINGS.md',
     '.github/workflows/lint.yml', '.github/workflows/codeql.yml', '.github/dependabot.yml', 'pyproject.toml',
+    '.github/CODEOWNERS',
+    '.github/security/main-ruleset.json', '.github/security/release-ruleset.json',
+    'docs/maintainers/FUNDED_LAUNCH.md', 'scripts/bounty_journal.js',
     '.gitattributes', '.editorconfig', 'package.json',
     '.github/workflows/bounty-commands.yml',
     '.github/workflows/stale-claims.yml',

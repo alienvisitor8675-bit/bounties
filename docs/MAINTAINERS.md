@@ -84,6 +84,12 @@ Any GitHub sync requires an explicit local approval list and runs via `--apply` 
 
 ## Claims
 
+Accepted bot control comments are the coordination journal; labels are its derived
+view. Manual label edits cannot override an existing transition. Use maintainer
+commands and rerun the original workflow after an API failure. Scheduled
+reconciliation repairs open issues. Do not edit/delete receipts. All mutating
+workflows must retain the shared `bounty-state` concurrency group.
+
 - `/claim` starts one exclusive claim for that Issue. The workflow intentionally supports one claimant/award per Issue.
 - `/progress ...` resets the stale-claim timer.
 - A warning is posted after 48 hours without progress.
@@ -93,6 +99,10 @@ Any GitHub sync requires an explicit local approval list and runs via `--apply` 
 For supply/evaluation bounties needing N independent implementations, create separate slot Issues (for example `1/3`, `2/3`, `3/3`). Do not run parallel claims on one Issue.
 
 ## Review
+
+`/approve` requires a recorded submission and an independent maintainer who is
+neither claimant nor submitter. It does not authorize payment. Follow
+[the funded-launch gate](maintainers/FUNDED_LAUNCH.md) before advertising funded work.
 
 Do not approve screenshots when the acceptance criteria are reproducible.
 

@@ -7,6 +7,7 @@ Internal-facing guides for the people who run the bounty board. Contributors do 
 | [../MAINTAINERS.md](../MAINTAINERS.md) | Triage, open, review and approve bounties |
 | [LAUNCH.md](LAUNCH.md) | Check the board is ready before it is announced |
 | [REPO_SETTINGS.md](REPO_SETTINGS.md) | Apply branch protection, Actions limits and security features in GitHub |
+| [FUNDED_LAUNCH.md](FUNDED_LAUNCH.md) | Verify deployment, independent review and treasury controls before funding |
 | [PUBLISH.md](PUBLISH.md) | Push the repository and bootstrap labels and settings |
 | [SECURITY_PATCH_SUMMARY.md](SECURITY_PATCH_SUMMARY.md) | Understand the evaluation-publication hardening and operator handoff |
 | [../DEMAND_INTAKE.md](../DEMAND_INTAKE.md) | Turn a private need into a safe public opportunity |
