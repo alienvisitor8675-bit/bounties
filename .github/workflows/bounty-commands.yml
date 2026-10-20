@@ -8,13 +8,20 @@ permissions:
   contents: read
   issues: write
 
-concurrency:
-  group: bounty-${{ github.repository }}-${{ github.event.issue.number }}
-  cancel-in-progress: false
-
 jobs:
   command:
-    if: github.event.issue.pull_request == null
+    if: >-
+      github.event.issue.pull_request == null &&
+      github.event.comment.user.type == 'User' &&
+      (contains(fromJSON('["/claim","/release","/open","/unblock","/approve"]'), github.event.comment.body) ||
+       startsWith(github.event.comment.body, '/progress ') ||
+       startsWith(github.event.comment.body, '/submit ') ||
+       startsWith(github.event.comment.body, '/changes ') ||
+       github.event.comment.body == '/block' || startsWith(github.event.comment.body, '/block '))
+    concurrency:
+      group: bounty-state-${{ github.repository }}
+      cancel-in-progress: false
+      queue: max
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:

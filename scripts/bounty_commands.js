@@ -6,42 +6,55 @@ const {
   quoteMarkdown,
   permissionAllowsMaintenance,
 } = require('./bounty_state');
-
-const STATUS_LABELS = [
-  'status:triage', 'status:open', 'status:claimed',
-  'status:review', 'status:blocked', 'status:done',
-];
+const { STATUS_LABELS, reconcileIssue, recordTransition } = require('./bounty_journal');
+const COMMANDS = new Set(['/claim', '/progress', '/release', '/submit', '/open', '/block', '/unblock', '/changes', '/approve']);
 
 module.exports = async function runBountyCommand({ github, context }) {
-  const raw = String(context.payload.comment.body || '').trim();
-  if (!raw.startsWith('/')) return;
+  const event = context.payload.comment;
+  const raw = String(event?.body || '').trim();
+  if (raw.length > 8192) return;
 
   const [command, ...rest] = raw.split(/\s+/);
+  if (!COMMANDS.has(command)) return;
   const payload = rest.join(' ').trim();
   const owner = context.repo.owner;
   const repo = context.repo.repo;
   const issue_number = context.issue.number;
   const actor = context.actor;
+  if (!Number.isSafeInteger(event.id) || event.id <= 0 || event.user?.type !== 'User' ||
+      event.user.login.toLowerCase() !== String(actor).toLowerCase() ||
+      !/^[A-Za-z0-9][A-Za-z0-9-]{0,38}$/.test(actor)) return;
+  const source = `comment:${event.id}`;
 
   const issueResp = await github.rest.issues.get({ owner, repo, issue_number });
   let issue = issueResp.data;
   const labelNames = () => issue.labels.map(l => typeof l === 'string' ? l : l.name);
 
-  async function refresh() {
-    issue = (await github.rest.issues.get({ owner, repo, issue_number })).data;
-  }
-  async function setStatus(name) {
-    const labels = labelNames().filter(label => !STATUS_LABELS.includes(label));
-    labels.push(name);
-    await github.rest.issues.setLabels({ owner, repo, issue_number, labels });
-    await refresh();
-  }
   async function comment(body) {
-    await github.rest.issues.createComment({ owner, repo, issue_number, body });
+    await github.rest.issues.createComment({ owner, repo, issue_number,
+      body: `<!-- telegraph-reject source="${source}" -->\n${body}` });
   }
   async function comments() {
     return github.paginate(github.rest.issues.listComments, { owner, repo, issue_number, per_page: 100 });
   }
+  async function transition(body) {
+    await recordTransition({ github, owner, repo, issue_number, source, body });
+  }
+
+  const all = await comments();
+  const state = parseState(all);
+  // Recover a prior accepted command before considering this delivery again.
+  if (state.processedSources.has(source)) {
+    await reconcileIssue({ github, owner, repo, issue_number, state });
+    return;
+  }
+  if (issue.state !== 'open' || issue.pull_request) return;
+  const current = (await github.rest.issues.getComment({ owner, repo, comment_id: event.id })).data;
+  if (current.body !== event.body || current.user?.login?.toLowerCase() !== actor.toLowerCase()) return;
+  issue = await reconcileIssue({ github, owner, repo, issue_number, state });
+  const statuses = labelNames().filter(label => STATUS_LABELS.has(label));
+  if (statuses.length !== 1 || statuses[0] === 'status:done') return;
+  const now = new Date().toISOString();
 
   let maintainerPermission;
   async function isMaintainer() {
@@ -63,10 +76,6 @@ module.exports = async function runBountyCommand({ github, context }) {
     return;
   }
 
-  const all = await comments();
-  const state = parseState(all);
-  const now = new Date().toISOString();
-
   if (command === '/claim') {
     if (!labelNames().includes('status:open')) {
       await comment('This Issue is not currently open for claiming. Only `status:open` bounties can be claimed.');
@@ -78,13 +87,16 @@ module.exports = async function runBountyCommand({ github, context }) {
     }
 
     const reward = snapshotReward(issue.body);
+    if ((reward.text || '').length > 16000) {
+      await comment('Reward terms are too long to snapshot safely. A maintainer must shorten the Reward section before claiming.');
+      return;
+    }
     const rewardHash = reward.sha256 || 'none';
     const rewardText = reward.text
       ? `\n\n**Reward terms locked for this claim** (SHA-256 \`${rewardHash}\`):\n${quoteMarkdown(reward.text)}`
       : '\n\n**Reward terms locked for this claim:** no explicit `## Reward` section was present at claim time.';
 
-    await setStatus('status:claimed');
-    await comment(
+    await transition(
       `<!-- telegraph-claim user="${actor}" at="${now}" reward_sha256="${rewardHash}" -->\n` +
       `Claimed by @${actor}. Post a meaningful \`/progress ...\` update within **72 hours** or the claim will be released automatically.` +
       rewardText
@@ -105,7 +117,7 @@ module.exports = async function runBountyCommand({ github, context }) {
       await comment('Please include a meaningful progress update after `/progress` (at least 15 characters).');
       return;
     }
-    await comment(`<!-- telegraph-progress user="${actor}" at="${now}" -->\nProgress recorded for @${actor}: ${payload}`);
+    await transition(`<!-- telegraph-progress user="${actor}" at="${now}" -->\nProgress recorded for @${actor}: ${payload}`);
     return;
   }
 
@@ -119,8 +131,7 @@ module.exports = async function runBountyCommand({ github, context }) {
       await comment(`Only @${state.claimant} or a maintainer can release this claim.`);
       return;
     }
-    await setStatus('status:open');
-    await comment(`<!-- telegraph-release user="${actor}" at="${now}" -->\nClaim released by @${actor}. This bounty is open again.`);
+    await transition(`<!-- telegraph-release user="${actor}" at="${now}" -->\nClaim released by @${actor}. This bounty is open again.`);
     return;
   }
 
@@ -146,30 +157,29 @@ module.exports = async function runBountyCommand({ github, context }) {
       await comment('Please include repository/demo/evidence links after `/submit`.');
       return;
     }
-    await setStatus('status:review');
     const override = maintainer && !isClaimant ? ' (maintainer override)' : '';
-    await comment(`<!-- telegraph-submit user="${actor}" at="${now}" -->\nSubmission from @${actor}${override} moved to **review**.\n\n${payload}`);
+    await transition(`<!-- telegraph-submit user="${actor}" at="${now}" -->\nSubmission from @${actor}${override} moved to **review**.\n\n${payload}`);
     return;
   }
 
   if (command === '/open') {
     if (!(await isMaintainer())) return;
-    await setStatus('status:open');
-    await comment(`<!-- telegraph-open user="${actor}" at="${now}" -->\nTriage complete. This bounty is now open for contribution.`);
+    if (state.claimant || !['status:triage', 'status:open'].includes(statuses[0])) return;
+    await transition(`<!-- telegraph-open user="${actor}" at="${now}" -->\nTriage complete. This bounty is now open for contribution.`);
     return;
   }
 
   if (command === '/block') {
     if (!(await isMaintainer())) return;
-    await setStatus('status:blocked');
-    await comment(`<!-- telegraph-block user="${actor}" at="${now}" -->\nMarked blocked by @${actor}.${payload ? `\n\n${payload}` : ''}`);
+    if (!['status:open', 'status:claimed', 'status:review'].includes(statuses[0])) return;
+    await transition(`<!-- telegraph-block user="${actor}" at="${now}" -->\nMarked blocked by @${actor}.${payload ? `\n\n${payload}` : ''}`);
     return;
   }
 
   if (command === '/unblock') {
     if (!(await isMaintainer())) return;
-    await setStatus(state.claimant ? 'status:claimed' : 'status:open');
-    await comment(`<!-- telegraph-unblock user="${actor}" at="${now}" -->\nUnblocked by @${actor}.`);
+    if (state.status !== 'status:blocked') return;
+    await transition(`<!-- telegraph-unblock user="${actor}" at="${now}" -->\nUnblocked by @${actor}.`);
     return;
   }
 
@@ -187,8 +197,7 @@ module.exports = async function runBountyCommand({ github, context }) {
       await comment('Please include a clear reason after `/changes` (at least 10 characters).');
       return;
     }
-    await setStatus('status:claimed');
-    await comment(
+    await transition(
       `<!-- telegraph-changes user="${actor}" claimant="${state.claimant}" at="${now}" -->\n` +
       `Changes requested by @${actor}. Returned to @${state.claimant} as **claimed**; the 72-hour progress window restarts now.\n\n${payload}`
     );
@@ -201,9 +210,15 @@ module.exports = async function runBountyCommand({ github, context }) {
       await comment('`/approve` is only valid while the bounty is in `status:review`.');
       return;
     }
-    await setStatus('status:done');
-    await github.rest.issues.update({ owner, repo, issue_number, state: 'closed', state_reason: 'completed' });
-    await comment(`<!-- telegraph-approve user="${actor}" at="${now}" -->\nVerified and approved by @${actor}. Bounty complete.`);
+    if (!state.lastSubmitter) {
+      await comment('A recorded submission is required before approval.');
+      return;
+    }
+    if ([state.claimant, state.lastSubmitter].some(user => user?.toLowerCase() === actor.toLowerCase())) {
+      await comment('An independent maintainer must review and approve this submission. Claimants and submitters cannot approve their own work.');
+      return;
+    }
+    await transition(`<!-- telegraph-approve user="${actor}" at="${now}" -->\nVerified and approved by @${actor}. Bounty complete. This does not authorize or execute a payout.`);
     return;
   }
 };

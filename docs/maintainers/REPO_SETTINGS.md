@@ -2,6 +2,11 @@
 
 Workflows and config files in this repo cannot enable these controls. A repository admin applies them once after the repo is created, then re-checks them before announcing it. Settings are under **Settings** unless noted.
 
+Importable examples are in `.github/security/main-ruleset.json` and
+`.github/security/release-ruleset.json`. Confirm the configured code owners can
+provide independent human review before enforcing it. See [FUNDED_LAUNCH.md](FUNDED_LAUNCH.md)
+for deployment verification, treasury separation and the funded-launch gate.
+
 ## 1. Branch protection (Rules → Rulesets → New branch ruleset, target `main`)
 
 - [ ] Restrict deletions and block force pushes
@@ -43,7 +48,9 @@ The bounty-command workflow runs on `issue_comment` with `issues: write`, so kee
 - [ ] Base permission for members: **Read**
 - [ ] Maintainers hold **Write** or higher through a team, not individual grants. Anyone with Write can run `/open`, `/approve` and `/release`; review the list regularly
 - [ ] Two or more admins; no shared accounts
-- [ ] Require two-factor authentication for the organisation
+- [ ] Require two-factor authentication for privileged accounts; use organization enforcement when organization-owned
+- [ ] Use passkeys or hardware security keys for privileged accounts; test recovery
+- [ ] Separate work review and treasury signing; no claimant/submitter self-approval
 
 ## 5. Secrets and environments
 

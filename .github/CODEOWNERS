@@ -1,0 +1,3 @@
+# Owners must retain explicit write access. Branch rules must require code-owner
+# review and an independent approval; this file alone does not enforce review.
+* @1xAhmed @telegraphprotocol

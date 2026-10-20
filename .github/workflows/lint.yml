@@ -33,4 +33,6 @@ jobs:
       - name: Workflows (actionlint)
         run: |
           bash <(curl -fsSL https://raw.githubusercontent.com/rhysd/actionlint/03d0035246f3e81f36aed592ffb4bebf33a03106/scripts/download-actionlint.bash) 1.7.7
-          ./actionlint -color
+          # GitHub supports queue:max; this pinned linter predates that property.
+          # Security tests validate its value; keep every other diagnostic.
+          ./actionlint -color -ignore 'unexpected key "queue" for "concurrency" section'

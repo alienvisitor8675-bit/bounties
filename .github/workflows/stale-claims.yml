@@ -11,6 +11,10 @@ permissions:
 
 jobs:
   stale:
+    concurrency:
+      group: bounty-state-${{ github.repository }}
+      cancel-in-progress: false
+      queue: max
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:

@@ -27,6 +27,11 @@ When `/claim` succeeds, the Telegraph bot records a SHA-256 hash and a visible s
 
 **Those claim-time reward terms are immutable for that active claim.** Editing the Issue later does not silently change what the claimant accepted.
 
+This is a commitment not to change accepted terms retroactively. The snapshot is
+stored in a GitHub comment, which privileged users can edit or delete; it is not a
+tamper-proof ledger or proof of funding. Independently authorized funding and payout
+records must be checked before payment. See [FUNDED_LAUNCH.md](maintainers/FUNDED_LAUNCH.md).
+
 If reward terms genuinely need to change, release the claim, update the Issue, and let the contributor claim again under the new terms. Do not retroactively reduce or alter a live claim's reward terms.
 
 ## Cross-denomination payouts
@@ -54,7 +59,11 @@ The automated workflow deliberately enforces **one claimant and one award per Gi
 
 If the network needs N independent Miners, Evaluators, or implementations, create N clearly related **slot Issues** (for example `1/3`, `2/3`, `3/3`) with their own claim state and reward terms.
 
-This keeps claims race-safe and makes each contributor's acceptance/reward state unambiguous. Do not advertise parallel `max_awards > 1` on a single Issue.
+The bot serializes commands and scheduled releases in a shared Actions queue and
+records accepted transitions before updating labels. Retrying the original job
+repairs partial updates without accepting its source comment twice. This depends on
+the deployed workflows using that shared queue; GitHub API updates are not a database
+transaction. Do not advertise parallel `max_awards > 1` on a single Issue.
 
 ## Payout state
 

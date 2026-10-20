@@ -12,6 +12,11 @@ This repository is the public coordination surface for Telegraph contribution wo
 
 Maintainer commands are authorised by the actor's real repository permission, not by `author_association`. The list of people holding these permissions is the repository's collaborator list.
 
+Claimants and submitters cannot `/approve` their own work, even with admin access.
+An independent maintainer reviews the recorded submission. GitHub approval is
+technical acceptance only; payment requires separate funding and treasury approval
+under [the funded-launch controls](docs/maintainers/FUNDED_LAUNCH.md).
+
 ## Who decides what
 
 | Decision | Decided by |

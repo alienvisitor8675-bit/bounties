@@ -7,6 +7,7 @@ const ISO_UTC = '\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}\\.\\d{3}Z';
 const GH_USER = '[A-Za-z0-9](?:[A-Za-z0-9-]{0,38})(?:\\[bot\\])?';
 
 const patterns = {
+  reject: /^<!-- telegraph-reject source="(comment:\d+)" -->$/,
   claim: new RegExp(`^<!-- telegraph-claim user="(${GH_USER})" at="(${ISO_UTC})" reward_sha256="([a-f0-9]{64}|none)" -->$`),
   progress: new RegExp(`^<!-- telegraph-progress user="(${GH_USER})" at="(${ISO_UTC})" -->$`),
   release: new RegExp(`^<!-- telegraph-release user="(${GH_USER})" at="(${ISO_UTC})" -->$`),
@@ -31,6 +32,8 @@ function parseTrustedControl(comment) {
   if (loginOf(comment) !== TRUSTED_BOT_LOGIN) return null;
   const line = firstLine(comment?.body);
   let m;
+
+  if ((m = line.match(patterns.reject))) return { type: 'reject', source: m[1] };
 
   if ((m = line.match(patterns.claim))) {
     return { type: 'claim', user: m[1], at: m[2], rewardSha256: m[3] };
@@ -80,16 +83,26 @@ function parseState(comments) {
   let lastProgressAt = null;
   let lastSubmitter = null;
   let rewardSha256 = null;
+  let status = null;
+  let blockedStatus = null;
+  const processedSources = new Set();
 
   for (const comment of orderedComments(comments)) {
     const ctl = parseTrustedControl(comment);
     if (!ctl) continue;
+    const source = ctl.source || String(comment.body || '').split(/\r?\n/)[1]?.match(/^<!-- telegraph-event source="([a-z0-9:-]+)" -->$/)?.[1];
+    if (source && processedSources.has(source)) continue;
+    if (source) processedSources.add(source);
+    if (status === 'status:done') continue;
 
     if (ctl.type === 'claim') {
+      if (claimant || status === 'status:done') continue;
       claimant = ctl.user;
       claimedAt = ctl.at;
       lastProgressAt = ctl.at;
       rewardSha256 = ctl.rewardSha256 === 'none' ? null : ctl.rewardSha256;
+      lastSubmitter = null;
+      status = 'status:claimed';
     } else if (ctl.type === 'progress') {
       if (claimant && ctl.user.toLowerCase() === claimant.toLowerCase()) {
         lastProgressAt = ctl.at;
@@ -98,19 +111,35 @@ function parseState(comments) {
       if (claimant && ctl.claimant.toLowerCase() === claimant.toLowerCase()) {
         // A changes request starts a fresh work window for the preserved claimant.
         lastProgressAt = ctl.at;
+        lastSubmitter = null;
+        status = 'status:claimed';
       }
     } else if (ctl.type === 'release') {
+      if (status === 'status:done') continue;
       claimant = null;
       claimedAt = null;
       lastProgressAt = null;
       lastSubmitter = null;
       rewardSha256 = null;
+      status = 'status:open';
     } else if (ctl.type === 'submit') {
       lastSubmitter = ctl.user;
+      status = 'status:review';
+    } else if (ctl.type === 'open') {
+      if (!claimant && status !== 'status:done') status = 'status:open';
+    } else if (ctl.type === 'block') {
+      if (status !== 'status:done' && status !== 'status:blocked') {
+        blockedStatus = status || (claimant ? 'status:claimed' : 'status:open');
+        status = 'status:blocked';
+      }
+    } else if (ctl.type === 'unblock') {
+      if (status === 'status:blocked') status = blockedStatus;
+    } else if (ctl.type === 'approve') {
+      status = 'status:done';
     }
   }
 
-  return { claimant, claimedAt, lastProgressAt, lastSubmitter, rewardSha256 };
+  return { claimant, claimedAt, lastProgressAt, lastSubmitter, rewardSha256, status, blockedStatus, processedSources };
 }
 
 function isStaleWarningFor(comment, claimant, claimedAt) {

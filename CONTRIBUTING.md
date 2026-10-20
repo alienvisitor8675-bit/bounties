@@ -143,6 +143,11 @@ Pull requests will be closed or redirected if they contain:
 
 Run `python scripts/prepush.py` before pushing. CI runs the same check on Linux and Windows.
 
+Commands are accepted only when the bot posts its receipt. A maintainer may rerun
+the original canceled/failed command job; replaying an accepted command cannot
+create a second claim. Editing a command does not issue a new command. An independent
+maintainer must approve submissions, including work from repository collaborators.
+
 ## Working on this repository itself
 
 Changes to scripts, workflows, schemas or docs follow normal pull-request flow (see [GOVERNANCE.md](GOVERNANCE.md)).

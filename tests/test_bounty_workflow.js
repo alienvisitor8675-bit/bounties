@@ -15,7 +15,7 @@ function makeHarness({ labels = ['status:open'], body = '## Reward\nNo monetary/
   };
 
   function addComment(user, body, created_at = new Date().toISOString()) {
-    const c = { id: state.nextId++, user: { login: user }, body, created_at };
+    const c = { id: state.nextId++, user: { login: user, type: user.endsWith('[bot]') ? 'Bot' : 'User' }, body, created_at };
     state.comments.push(c);
     return c;
   }
@@ -27,6 +27,7 @@ function makeHarness({ labels = ['status:open'], body = '## Reward\nNo monetary/
         setLabels: async ({ labels: next }) => { state.issue.labels = [...next]; return { data: {} }; },
         createComment: async ({ body: text }) => ({ data: addComment(TRUSTED_BOT_LOGIN, text) }),
         listComments: async () => ({ data: [...state.comments] }),
+        getComment: async ({ comment_id }) => ({ data: state.comments.find(c => c.id === comment_id) }),
         update: async ({ state: nextState, state_reason }) => {
           state.issue.state = nextState;
           state.issue.state_reason = state_reason;
@@ -43,14 +44,16 @@ function makeHarness({ labels = ['status:open'], body = '## Reward\nNo monetary/
     },
   };
 
-  async function command(actor, text) {
+  async function command(actor, text, commentId) {
+    const event = commentId ? state.comments.find(c => c.id === commentId) : addComment(actor, text);
     const context = {
       repo: { owner: 'telegraph', repo: 'bounties' },
       issue: { number: 42 },
       actor,
-      payload: { comment: { body: text } },
+      payload: { comment: event },
     };
     await runCommand({ github, context });
+    return event.id;
   }
 
   return { state, github, command, addComment };
@@ -231,8 +234,9 @@ async function testApproveOnlyFromReviewAndClosesIssue() {
   const h = makeHarness({ labels: ['status:claimed'], permissions: { maintainer: 'admin' } });
   await h.command('maintainer', '/approve');
   assert.strictEqual(h.state.issue.state, 'open', 'approve must not skip review');
-  h.state.issue.labels = ['status:review'];
-  await h.command('maintainer', '/approve');
+  await h.command('maintainer', '/submit https://example.com/evidence');
+  h.state.permissions.reviewer = 'write';
+  await h.command('reviewer', '/approve');
   assert.strictEqual(h.state.issue.state, 'closed');
   assert(h.state.issue.labels.includes('status:done'));
 }
@@ -251,7 +255,7 @@ async function testBlockAndUnblockMaintainerOnly() {
 async function testChangesRequiresReasonAndReviewState() {
   const h = makeHarness({ permissions: { maintainer: 'write' } });
   await h.command('alice', '/claim');
-  h.state.issue.labels = ['status:review'];
+  await h.command('alice', '/submit https://example.com/evidence');
   await h.command('maintainer', '/changes no');
   assert(h.state.issue.labels.includes('status:review'), 'short reason must be rejected');
   await h.command('maintainer', '/changes please add the reference fixtures');
@@ -260,8 +264,160 @@ async function testChangesRequiresReasonAndReviewState() {
 
 function testConcurrencyConfigured() {
   const workflow = fs.readFileSync(path.join(__dirname, '..', '.github', 'workflows', 'bounty-commands.yml'), 'utf8');
-  assert(workflow.includes('group: bounty-${{ github.repository }}-${{ github.event.issue.number }}'));
+  assert(workflow.includes('group: bounty-state-${{ github.repository }}'));
   assert(workflow.includes('cancel-in-progress: false'));
+  assert(workflow.includes('queue: max'));
+  const stale = fs.readFileSync(path.join(__dirname, '..', '.github', 'workflows', 'stale-claims.yml'), 'utf8');
+  assert(stale.includes('group: bounty-state-${{ github.repository }}'));
+  assert(stale.includes('queue: max'));
+}
+
+async function testCommentFailureDoesNotCreateClaim() {
+  const h = makeHarness();
+  const createComment = h.github.rest.issues.createComment;
+  h.github.rest.issues.createComment = async () => { throw new Error('simulated write failure'); };
+  await assert.rejects(h.command('alice', '/claim'), /simulated write failure/);
+  assert(h.state.issue.labels.includes('status:open'));
+  assert.strictEqual(parseState(h.state.comments).claimant, null);
+  h.github.rest.issues.createComment = createComment;
+  await h.command('alice', '/claim', h.state.comments[0].id);
+  assert.strictEqual(parseState(h.state.comments).claimant, 'alice');
+}
+
+async function testRetryRepairsLabelsWithoutDuplicateClaim() {
+  const h = makeHarness();
+  const setLabels = h.github.rest.issues.setLabels;
+  h.github.rest.issues.setLabels = async () => { throw new Error('simulated label failure'); };
+  await assert.rejects(h.command('alice', '/claim'), /simulated label failure/);
+  assert.strictEqual(parseState(h.state.comments).claimant, 'alice');
+  assert(h.state.issue.labels.includes('status:open'));
+  h.github.rest.issues.setLabels = setLabels;
+  await h.command('alice', '/claim', h.state.comments[0].id);
+  assert(h.state.issue.labels.includes('status:claimed'));
+  assert.strictEqual(h.state.comments.filter(c => c.body.startsWith('<!-- telegraph-claim')).length, 1);
+}
+
+async function testAmbiguousCommentFailureIsNotReplayed() {
+  const h = makeHarness();
+  const createComment = h.github.rest.issues.createComment;
+  h.github.rest.issues.createComment = async args => {
+    await createComment(args);
+    throw new Error('simulated timeout after write');
+  };
+  await assert.rejects(h.command('alice', '/claim'), /timeout after write/);
+  h.github.rest.issues.createComment = createComment;
+  await h.command('alice', '/claim', h.state.comments[0].id);
+  assert.strictEqual(h.state.comments.filter(c => c.body.startsWith('<!-- telegraph-claim')).length, 1);
+  assert(h.state.issue.labels.includes('status:claimed'));
+}
+
+async function testOldDeliveryCannotReclaimReleasedIssue() {
+  const h = makeHarness();
+  const id = await h.command('alice', '/claim');
+  await h.command('alice', '/release');
+  await h.command('alice', '/claim', id);
+  assert.strictEqual(parseState(h.state.comments).claimant, null);
+  assert(h.state.issue.labels.includes('status:open'));
+}
+
+async function testSelfApprovalRejected() {
+  const h = makeHarness({ permissions: { alice: 'admin', reviewer: 'write' } });
+  await h.command('alice', '/claim');
+  await h.command('alice', '/submit https://example.com/evidence');
+  await h.command('alice', '/approve');
+  assert.strictEqual(h.state.issue.state, 'open');
+  assert(h.state.comments.at(-1).body.includes('independent maintainer'));
+  await h.command('reviewer', '/approve');
+  assert.strictEqual(h.state.issue.state, 'closed');
+}
+
+async function testApprovalRetryRepairsFailedClose() {
+  const h = makeHarness({ permissions: { reviewer: 'write' } });
+  await h.command('alice', '/claim');
+  await h.command('alice', '/submit https://example.com/evidence');
+  const update = h.github.rest.issues.update;
+  h.github.rest.issues.update = async () => { throw new Error('simulated close failure'); };
+  await assert.rejects(h.command('reviewer', '/approve'), /close failure/);
+  h.github.rest.issues.update = update;
+  const id = h.state.comments.find(c => c.user.login === 'reviewer').id;
+  await h.command('reviewer', '/approve', id);
+  assert.strictEqual(h.state.issue.state, 'closed');
+  assert.strictEqual(h.state.comments.filter(c => c.body.startsWith('<!-- telegraph-approve')).length, 1);
+}
+
+async function testClosedIssueAndBotsCannotClaim() {
+  const h = makeHarness();
+  h.state.issue.state = 'closed';
+  await h.command('alice', '/claim');
+  assert.strictEqual(parseState(h.state.comments).claimant, null);
+  h.state.issue.state = 'open';
+  await h.command('dependabot[bot]', '/claim');
+  assert.strictEqual(parseState(h.state.comments).claimant, null);
+}
+
+async function testLabelEditsCannotSkipReviewOrReopenCompletedWork() {
+  const h = makeHarness({ permissions: { reviewer: 'write' } });
+  await h.command('alice', '/claim');
+  h.state.issue.labels = ['status:review'];
+  await h.command('reviewer', '/approve');
+  assert.strictEqual(h.state.issue.state, 'open');
+  assert(h.state.issue.labels.includes('status:claimed'));
+  await h.command('alice', '/submit https://example.com/evidence');
+  await h.command('reviewer', '/approve');
+  h.state.issue.state = 'open';
+  h.state.issue.labels = ['status:open'];
+  await h.command('bob', '/claim');
+  assert.strictEqual(h.state.issue.state, 'closed');
+  assert(h.state.issue.labels.includes('status:done'));
+}
+
+async function testUnsupportedAndOversizedInputDoesNotCallGitHub() {
+  const github = new Proxy({}, { get() { throw new Error('unexpected API access'); } });
+  for (const body of ['/unknown hello', '/progress ' + 'x'.repeat(8192), 'hello']) {
+    await runCommand({ github, context: { payload: { comment: { body } } } });
+  }
+}
+
+async function testOpenCannotResetAnActiveClaim() {
+  const h = makeHarness({ permissions: { reviewer: 'write' } });
+  await h.command('alice', '/claim');
+  await h.command('reviewer', '/open');
+  assert(h.state.issue.labels.includes('status:claimed'));
+}
+
+async function testUnblockPreservesReview() {
+  const h = makeHarness({ permissions: { reviewer: 'write' } });
+  await h.command('alice', '/claim');
+  await h.command('alice', '/submit https://example.com/evidence');
+  await h.command('reviewer', '/block waiting for independent evidence');
+  await h.command('reviewer', '/unblock');
+  assert(h.state.issue.labels.includes('status:review'));
+}
+
+async function testEditedQueuedCommandIsIgnored() {
+  const h = makeHarness();
+  const event = h.addComment('alice', '/claim');
+  const original = { ...event };
+  event.body = '/release';
+  await runCommand({ github: h.github, context: { repo: {owner:'telegraph',repo:'bounties'},
+    issue: {number:42}, actor:'alice', payload:{comment: original} } });
+  assert.strictEqual(parseState(h.state.comments).claimant, null);
+}
+
+async function testConflictingLabelsFailClosed() {
+  const h = makeHarness({ labels: ['status:open', 'status:review'] });
+  await h.command('alice', '/claim');
+  assert.strictEqual(parseState(h.state.comments).claimant, null);
+}
+
+async function testRejectedClaimCannotBeReplayedAfterRelease() {
+  const h = makeHarness();
+  await h.command('alice', '/claim');
+  const rejected = await h.command('bob', '/claim');
+  await h.command('alice', '/release');
+  await h.command('bob', '/claim', rejected);
+  assert.strictEqual(parseState(h.state.comments).claimant, null);
+  assert(h.state.issue.labels.includes('status:open'));
 }
 
 async function main() {
@@ -286,6 +442,20 @@ async function main() {
     testApproveOnlyFromReviewAndClosesIssue,
     testBlockAndUnblockMaintainerOnly,
     testChangesRequiresReasonAndReviewState,
+    testCommentFailureDoesNotCreateClaim,
+    testRetryRepairsLabelsWithoutDuplicateClaim,
+    testAmbiguousCommentFailureIsNotReplayed,
+    testOldDeliveryCannotReclaimReleasedIssue,
+    testSelfApprovalRejected,
+    testApprovalRetryRepairsFailedClose,
+    testClosedIssueAndBotsCannotClaim,
+    testLabelEditsCannotSkipReviewOrReopenCompletedWork,
+    testUnsupportedAndOversizedInputDoesNotCallGitHub,
+    testOpenCannotResetAnActiveClaim,
+    testUnblockPreservesReview,
+    testEditedQueuedCommandIsIgnored,
+    testConflictingLabelsFailClosed,
+    testRejectedClaimCannotBeReplayedAfterRelease,
   ];
   for (const test of tests) {
     await test();
