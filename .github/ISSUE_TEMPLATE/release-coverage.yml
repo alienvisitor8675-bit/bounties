@@ -23,7 +23,7 @@ body:
     id: intents
     attributes:
       label: Relevant existing Intent(s)
-      description: Use existing Telegraph Intent names where possible. If none clearly fit, say "needs Intent triage" rather than inventing one.
+      description: Use existing Telegraph Intent names where possible. If none clearly fit, enter "needs Intent triage."
       placeholder: e.g. CODE_GENERATION, CODE_REVIEW
     validations:
       required: true
@@ -51,14 +51,14 @@ body:
     id: evidence
     attributes:
       label: Evidence that this is a real, time-sensitive coverage gap
-      description: Link the release, show why the existing market applies, and include any reproducible integration/evaluation blocker. Do not invent customer demand or endorsement.
+      description: Link the release, show why the existing market applies, and include a reproducible integration or evaluation blocker. Include customer-demand or endorsement claims only when verified.
     validations:
       required: true
   - type: textarea
     id: acceptance
     attributes:
       label: Observable completion criteria
-      description: Define what would make the release eligible for fair measurement. Do not require a particular rank or winner.
+      description: Define what would make the release eligible for fair measurement under the same rules as other Providers.
       placeholder: "Provider is callable through the approved adapter; existing Intent fixtures run; evaluator coverage is valid; ranking can be produced without special-casing the Provider."
     validations:
       required: true

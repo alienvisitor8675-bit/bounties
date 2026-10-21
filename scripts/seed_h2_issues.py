@@ -44,9 +44,9 @@ for item in DATA:
                  f"- Eligibility: {reward['eligibility']}\n"+
                  f"- Verification: {reward['verification_condition']}\n"+
                  f"- Payout window: {reward['payout_window']}\n"+
-                 "- Claim-time lock: reward terms are snapshotted by the bot when `/claim` succeeds.\n"]
+                 "- Claim-time record: the bot stores a snapshot and hash of these terms when `/claim` succeeds.\n"]
     else:
-        body += ['## Reward\nNo monetary/token reward is currently committed. This issue may still carry H2 eligibility/recognition only if explicitly stated elsewhere.\n']
+        body += ['## Reward\n**Unfunded.** This Issue carries no monetary or token reward. Any H2 eligibility or recognition is stated separately.\n']
     body += ['## Claim / submit\nComment `/claim` to coordinate work. Post `/progress ...` at least every 72 hours. When complete, comment `/submit ...` with repository/demo/evidence links.\n']
     metadata={k:item.get(k) for k in ['intent','work_type','gap_type','priority','missions','reward']}
     body += ['<!-- telegraph-bounty\n'+json.dumps(metadata,separators=(',',':'))+'\n-->\n']

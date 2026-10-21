@@ -17,7 +17,7 @@ The script:
 4. pushes the repository;
 5. creates the labels/topics/settings with `make bootstrap`.
 
-It will **not** overwrite an unrelated existing repository.
+It stops when the target name belongs to an unrelated repository.
 
 ## Then
 
@@ -27,8 +27,8 @@ It will **not** overwrite an unrelated existing repository.
 4. define reward terms where funded;
 5. run `make seed-h2`;
 6. run `make launch-check` for the initial offline H2 seed, or `make launch-check-live` once the actual ongoing/H2 Issues are live;
-7. review non-H2 customer/mainnet contribution needs independently of H2 and confirm public-safe scope;
+7. review non-H2 customer and mainnet contribution needs independently of H2 and confirm the approved public scope;
 8. upload `assets/social-preview.png` in GitHub repository settings;
 9. pin the repo and announce it.
 
-Pushing and announcing are intentionally separate. The repository may be structurally ready while the public bounty queue is not yet populated.
+Pushing and announcing are separate milestones. Announce after the repository is structurally ready and the public bounty queue contains approved work.

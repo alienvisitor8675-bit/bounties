@@ -3,8 +3,8 @@
 
 All public bodies, titles and console output use an explicit allowlist. Only a
 trusted internal indexer may calculate per-Intent diagnostics. Issue creation
-is opt-in, requires key-bound public IDs and maintainer approval, and makes
-only unfunded triage issues. Never writes or reads hidden qualification material.
+is opt-in, requires key-bound public IDs and maintainer approval, and creates
+unfunded triage Issues. Hidden qualification material stays outside this tool.
 """
 import argparse
 import datetime as dt
@@ -44,17 +44,17 @@ Telegraph welcomes Category-compatible evaluation methods, independently support
 ## How to contribute
 - Follow the **public** Category documentation and the existing V2 contribution interface. Use independently supportable evidence where possible.
 - Submit the method/material and non-sensitive reproducibility information through the approved contribution workflow.
-- Demonstrate general task compatibility and an independently assessable quality improvement where feasible. No Miner should be predetermined to win.
+- Demonstrate general task compatibility and an independently assessable quality improvement where feasible. Apply the same evaluation rules to every Miner.
 - Maintainers will privately scope and validate work against live requirements before this opportunity becomes a claimable, funded bounty.
 
-**No exact coverage gaps, per-Intent weaknesses, source statistics, hidden tests, or qualification thresholds are disclosed here.** Do not post these details, customer payloads, credentials, security flaws or sensitive test cases in public Issues or comments. For sensitive reports, see SECURITY.md.
+This public Issue omits exact coverage gaps, per-Intent weaknesses, source statistics, hidden tests and qualification thresholds. Share those details, customer payloads, credentials, security flaws and sensitive test cases through the private channel in SECURITY.md.
 
 ## Review and funding
 - [ ] Maintainer confirms safe public acceptance criteria and a legitimate need.
 - [ ] Maintainer confirms authorized testing and review path.
 - [ ] Any bounty reward and claimable status require separate explicit approval under the existing workflow.
 
-This starts at `status:triage` and is not claimable until a maintainer uses `/open`. No monetary/token bounty is promised. V2 Evaluator emissions are independent, demand-backed and not earned just by opening an Issue.
+This starts at `status:triage` and becomes claimable only after a maintainer uses `/open`. It is currently unfunded. V2 Evaluator emissions remain a separate, demand-backed protocol mechanism.
 
 <!-- telegraph-eval-opportunity {item['id']} -->
 '''
@@ -63,7 +63,7 @@ This starts at `status:triage` and is not claimable until a maintainer uses `/op
 def gh(*args):
     r = subprocess.run(('gh', *map(str, args)), capture_output=True, text=True)
     if r.returncode:
-        # Do not echo upstream error text: it may contain secrets or internal logs.
+        # Keep upstream error text in the authorized environment; it may contain secrets or internal logs.
         raise RuntimeError('GitHub CLI action failed; inspect local authorized diagnostics')
     return r.stdout.strip()
 
@@ -86,7 +86,7 @@ def existing_issues(repo):
 
 def main():
     a = argparse.ArgumentParser(description=__doc__)
-    a.add_argument('--opportunities', required=True, help='public projection only, never internal state')
+    a.add_argument('--opportunities', required=True, help='strict public projection file')
     a.add_argument('--apply', action='store_true', help='create approved unfunded triage issues')
     a.add_argument('--approvals', help='JSON: approved_ids, verified_by')
     a.add_argument('--repo', help='GitHub owner/repo (required with --apply)')
@@ -131,7 +131,7 @@ def main():
                 cmd += ['--label', label]
             print('  Created:', gh(*cmd))
     if args.apply and set(live) - {x['id'] for x in items}:
-        print('Some existing public opportunities were not present; review privately. No issue was changed.')
+        print('Some existing public opportunities were absent from this export; review them privately. Existing Issues remain unchanged.')
 
 
 if __name__ == '__main__':

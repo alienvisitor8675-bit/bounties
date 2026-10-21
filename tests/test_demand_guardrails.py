@@ -22,7 +22,7 @@ class DemandGuardrails(unittest.TestCase):
 
     def test_no_public_customer_ingestion_is_claimed(self):
         content = (ROOT / 'docs/DEMAND_INTAKE.md').read_text(encoding='utf-8')
-        self.assertIn('does not expose an ingestion API', content)
+        self.assertIn('has no ingestion API', content)
         self.assertIn('consent', content.lower())
         self.assertIn('production system', content.lower())
         self.assertIn('private', content.lower())

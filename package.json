@@ -1,7 +1,7 @@
 {
   "name": "telegraph-bounties",
   "private": true,
-  "description": "Tooling and tests for the Telegraph Bounties board. Not published to npm.",
+  "description": "Internal tooling and tests for the Telegraph Bounties board.",
   "license": "MIT",
   "engines": {
     "node": ">=20"

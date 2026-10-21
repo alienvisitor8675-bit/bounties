@@ -2,10 +2,10 @@
 
 Be useful, specific and respectful.
 
-- Critique work, not people.
-- Do not spam, bounty-squat, fabricate evidence or misrepresent completion.
-- Do not publish security-sensitive information.
-- Do not harass maintainers or contributors over reward decisions.
+- Keep criticism focused on the work.
+- Submit relevant contributions and represent evidence and completion accurately.
+- Use the private reporting channel for security-sensitive information.
+- Discuss reward decisions professionally.
 - Maintainers may close low-signal or abusive contributions that create more work than value.
 
 The standard is simple: **does this help the network become more useful?**

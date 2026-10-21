@@ -1,30 +1,30 @@
 name: Evaluator development opportunity (public / nonsensitive)
-description: Suggest reusable evaluation work for a broad Category without publishing specific ranking weaknesses.
+description: Suggest reusable evaluation work for a broad public Category.
 title: "[Evaluator] "
 labels: ["work:evaluator", "gap:evaluation", "status:triage"]
 body:
   - type: markdown
     attributes:
       value: |
-        **Public-safe form only.** Do not identify exploitable evaluation blind spots, stale tests, source concentrations, hidden cases, per-Intent weaknesses, credentials or customer data. Sensitive details belong in a private report per SECURITY.md.
+        This form creates a public Issue. Describe the Category and general improvement here; report exploitable blind spots, stale tests, source concentration, hidden cases, per-Intent weaknesses, credentials and customer data through the private channel in SECURITY.md.
   - type: input
     id: category
     attributes:
       label: Public Category
-      description: A reusable task family, not a vulnerable Intent ID.
+      description: Name the reusable task family for this proposal.
     validations:
       required: true
   - type: textarea
     id: proposal
     attributes:
       label: Suggested general improvement
-      description: Describe an evaluation methodology, robust independent verification tool, or Category-compatible adapter improvement at a nonsensitive level.
+      description: Describe a public evaluation methodology, independent verification tool or Category-compatible adapter improvement.
     validations:
       required: true
   - type: textarea
     id: public_acceptance
     attributes:
       label: Safe public acceptance outline
-      description: General reproducible outcomes only. Maintainers will agree privately on specific targets and validation details.
+      description: Describe general reproducible outcomes. Maintainers agree on sensitive targets and validation details privately.
     validations:
       required: true

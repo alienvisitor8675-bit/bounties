@@ -11,16 +11,16 @@ h2 = (ROOT/'docs/H2.md').read_text(encoding='utf-8')
 
 assert 'source:release' in form
 assert 'Canonical release source' in form
-assert 'Do not require a particular rank or winner' in form
+assert 'same rules as other Providers' in form
 assert 'source:release' in bootstrap
 assert 'never require a predetermined rank' in agents
 assert 'does **not** impose one universal response schema' in h2
 assert 'fair eligibility' in doc
-assert 'not on winning' in doc
-assert 'Do **not** invent customer demand' in doc
+assert 'closes on fair eligibility' in doc
+assert 'claims require their own verification' in doc
 assert 'Provider-native interfaces may differ' in doc
 
 print('RELEASE COVERAGE OK')
 
 assert 'Historical receipt vs current status' in doc
-assert 'Never let an old `#1` event receipt silently present itself' in doc
+assert 'Historical receipts retain their original timestamp' in doc

@@ -26,7 +26,7 @@ The offline check inspects the **H2 seed file only** and is suitable before the 
 make launch-check-live  # requires gh login and correct GitHub repository selection
 ```
 
-The live check validates **actual open claimable Issues** from all approved sources (not commercial Provider recruitment and not speculative triage), so a permanent board is not artificially limited by H2 seed count. It is a structural data gate, not proof of consent, revenue or production readiness. Both routes require real approved issues; neither fabricates launch tasks.
+The live check validates **open claimable Issues** from all approved sources. It excludes commercial Provider recruitment and triage proposals, so the permanent board can grow beyond H2 seed data. This structural gate complements the separate reviews for consent, revenue and production readiness. Both routes require approved work.
 
 ### Minimum before launch
 
@@ -35,11 +35,11 @@ The live check validates **actual open claimable Issues** from all approved sour
 - at least **2 `good first bounty` tasks**;
 - every funded bounty has complete reward terms;
 - `/claim`, `/progress`, `/release`, `/submit`, `/approve` tested on a disposable Issue;
-- no security-sensitive task exposed publicly;
+- security-sensitive work uses the private reporting path;
 - custom GitHub social preview uploaded;
 - repo pinned on the Telegraph organization/profile;
 - Telegraph/Explorer/Anjoman discovery surfaces link to relevant filtered work where suitable; H2 remains an optional filter;
-- launch post shows actual work, not only the repository URL.
+- launch post features specific available work and links to the repository.
 
 ## First 20 seconds
 
@@ -71,7 +71,7 @@ Release coverage can create equally concrete proof:
 
 > Major model version launched → release integration gap was closed → normal evaluation ran → the measured rank/result became public.
 
-The story is the verified market change, not merely that an Issue closed.
+Lead with the verified market change and use the closed Issue as its evidence.
 
 For release-linked proof, distinguish an immutable historical event receipt from a live current-rank object. Historical proof should carry the measurement context and timestamp/round; live objects must update or expire as state changes.
 
@@ -95,8 +95,8 @@ Suggested topics:
 
 ## Stars
 
-Do not gate anything behind stars or manufacture urgency.
+Keep participation independent of star counts and use real deadlines when urgency exists.
 
-Ask the existing community to star/watch **after** the repository contains genuinely useful public work. The repo should deserve the star even from someone who never claims a bounty.
+Ask the existing community to star or watch **after** the repository contains useful public work. The repository should also serve readers who never claim a bounty.
 
-No architecture can guarantee a star count. The job of the repository is to maximize usefulness, repeat visits, contributions and shareable proof.
+Measure the repository by usefulness, repeat visits, contributions and shareable proof. Those qualities create the conditions for organic growth.

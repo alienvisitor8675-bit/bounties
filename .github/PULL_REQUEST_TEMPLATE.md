@@ -14,7 +14,7 @@
 
 - [ ] The change is the smallest useful implementation of the requirement.
 - [ ] I ran/tested what I changed (`npm test` and `python scripts/prepush.py` pass).
-- [ ] I did not include secrets, private diagnostics, hidden evaluation material, customer data or sensitive vulnerability details.
+- [ ] This PR contains only material approved for public disclosure; sensitive information uses the private reporting path.
 - [ ] I updated tests and docs for any change to claim, reward or disclosure behaviour.
-- [ ] I did not invent demand, endorsements, request IDs or results.
+- [ ] Demand, endorsements, request IDs and results are supported by verifiable evidence.
 - [ ] If this closes a bounty, the acceptance criteria are reproducibly met.

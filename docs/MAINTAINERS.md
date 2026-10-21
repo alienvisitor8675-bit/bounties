@@ -10,7 +10,7 @@ Every public bounty should answer five questions in under one minute:
 4. **How will completion be verified?**
 5. **How important is it right now?**
 
-If any answer is unclear, keep the issue in `status:triage`. A commercial Provider opportunity is allowed as an open **recruitment listing**, but never a claimable bounty.
+If any answer is unclear, keep the Issue in `status:triage`. A commercial Provider opportunity may be an open **recruitment listing** and follows the separate onboarding path.
 
 ## Triage: reduce to the reusable primitive
 
@@ -30,26 +30,26 @@ Safer public evaluation example:
 
 > Propose a reusable, independently verifiable evaluation methodology for an approved task Category; acceptance details and any non-public coverage weaknesses are reviewed privately.
 
-Do not publish the exact Intent that is vulnerable, missing private cases, hidden reference answers or the known weak implementation. A public reviewer cannot demand secret qualification inputs as public Issue acceptance criteria.
+Keep vulnerable Intent details, private cases, hidden reference answers and known weak implementations in the authorized review channel. Public acceptance criteria must remain reproducible without revealing secret qualification inputs.
 
-## Public reports are not automatically bounties
+## Opening a bounty
 
 New Issue Forms start in `status:triage`.
 
 A maintainer uses `/open` only after:
 
 - the gap is real (for release coverage, verify the canonical release source and the concrete missing market capability);
-- it is not a duplicate;
+- it is distinct from existing open and closed Issues;
 - the scope is reusable;
 - acceptance criteria are objective enough to verify;
 - reward terms are clear if funded.
 
-This is the main anti-slop barrier.
+This review is the quality gate for the public board.
 
 ## Priority
 
 ### P0
-Blocks material demand, several Apps, critical reliability/security, or an important time-sensitive market outcome. Major-release coverage may qualify when the release is materially relevant to a live Telegraph market; not every announcement is P0.
+Blocks material demand, several Apps, critical reliability or security, or an important time-sensitive market outcome. Major-release coverage may qualify when it is materially relevant to a live Telegraph market; use lower priorities for narrower impact.
 
 ### P1
 Materially improves quality, coverage, evaluation, integration or developer velocity.
@@ -64,30 +64,30 @@ Use `source:release` only for an externally verifiable model/API/agent/tool/data
 Before `/open`:
 
 - map the release to existing Intent(s) first;
-- verify access/integration can be done without bypassing controls or violating provider terms;
+- verify that access and integration respect provider controls and terms;
 - identify the actual missing piece: supply/integration, evaluation, tooling, capacity/reliability, or Intent review;
-- make acceptance criteria prove **fair eligibility for normal measurement**, not a desired rank;
-- never special-case scoring to make the new Provider win;
-- never publish private customer names, commitments, budgets or internal pipeline details unless approved for disclosure.
+- make acceptance criteria prove **fair eligibility for normal measurement**;
+- apply the same scoring rules used for other eligible Providers;
+- publish customer names, commitments, budgets and internal pipeline details only with disclosure approval.
 
-If the work is time-sensitive and no contributor can land it fast enough, the internal team may complete it and submit the same reproducible proof. GitHub is the coordination surface, not a reason to let an important market go stale.
+For time-sensitive work, the internal team may complete the gap and submit the same reproducible proof through the public workflow.
 
 See [RELEASE_COVERAGE.md](RELEASE_COVERAGE.md).
 
 ## Evaluation-needs triage and Category-level reuse
 
-The protocol/Explorer team should expose current non-secret per-Intent counters and Category evaluation requirement profiles. The new [evaluation needs interface](EVALUATION_NEEDS.md) converts these into grouped **triage candidates**. This prevents one bounty per hyperspecific parameter and does not change V2.
+The protocol or Explorer team should provide current per-Intent counters and Category evaluation requirement profiles to the authorized operator pipeline. The [evaluation needs interface](EVALUATION_NEEDS.md) converts them into grouped **triage candidates**, avoiding one bounty per narrow parameter while leaving V2 unchanged.
 
-Before `/open`, confirm the affected Intent(s), genuine compatibility of the shared adapter, evidence provenance, freshness, representative test distribution, independent source control, actual blocked Apps/qualified paid demand where claimed, and that the proposed improvement can be measured without preselecting a winner. A passed dataset schema is not proof of truthful labels.
+Before `/open`, confirm the affected Intents, compatibility of the shared adapter, evidence provenance, freshness, representative test distribution, independent source control, blocked Apps or qualified paid demand where claimed, and a measurement method that applies fairly to every Provider. Schema validation establishes format; semantic claims still need evidence.
 
-Any GitHub sync requires an explicit local approval list and runs via `--apply` by an authenticated maintainer. It creates triage Issues only and **never** overwrites an existing Issue's body, rewards, claim or approval. Closed/absent opportunities need manual review; no automated award or consensus mutation. Profile thresholds are discovery policy, not protocol consensus thresholds.
+GitHub sync requires an explicit local approval list and `--apply` from an authenticated maintainer. It creates triage Issues and preserves existing Issue bodies, rewards, claims and approvals. Closed or absent opportunities require manual review. Awards and protocol state remain outside the sync, and profile thresholds remain discovery policy rather than consensus rules.
 
 ## Claims
 
 Accepted bot control comments are the coordination journal; labels are its derived
 view. Manual label edits cannot override an existing transition. Use maintainer
 commands and rerun the original workflow after an API failure. Scheduled
-reconciliation repairs open issues. Do not edit/delete receipts. All mutating
+reconciliation repairs open Issues. Preserve command receipts. All mutating
 workflows must retain the shared `bounty-state` concurrency group.
 
 - `/claim` starts one exclusive claim for that Issue. The workflow intentionally supports one claimant/award per Issue.
@@ -96,15 +96,15 @@ workflows must retain the shared `bounty-state` concurrency group.
 - The claim is released after 72 hours without progress.
 - Maintainers can release stale/invalid claims.
 
-For supply/evaluation bounties needing N independent implementations, create separate slot Issues (for example `1/3`, `2/3`, `3/3`). Do not run parallel claims on one Issue.
+For supply or evaluation bounties needing N independent implementations, create separate slot Issues (for example `1/3`, `2/3`, `3/3`), each with one active claim.
 
 ## Review
 
-`/approve` requires a recorded submission and an independent maintainer who is
-neither claimant nor submitter. It does not authorize payment. Follow
+`/approve` requires a recorded submission and a maintainer other than the claimant
+and submitter. Payment requires its own authorization. Follow
 [the funded-launch gate](maintainers/FUNDED_LAUNCH.md) before advertising funded work.
 
-Do not approve screenshots when the acceptance criteria are reproducible.
+Reproduce acceptance criteria directly; use screenshots as supporting evidence.
 
 Verify the real thing:
 
@@ -128,16 +128,9 @@ If verification finds fixable problems, use:
 
 This preserves the claimant, returns the Issue from `status:review` to `status:claimed`, records the requested changes, and restarts the 72-hour progress window.
 
-## Issue inflation
+## Issue quality
 
-One sharp bounty is better than ten vague ones.
-
-Do not turn:
-
-- every mission into an Intent;
-- every app output into a protocol primitive;
-- every brainstorm into an Issue;
-- every generated PR into maintainer work.
+Prefer one clear bounty over several overlapping proposals. Create Intents for reusable intelligence primitives, Issues for evidenced gaps, and pull requests for requested repository changes.
 
 ## What to publish
 
@@ -153,12 +146,12 @@ Maintainer-only commands are authorized from the actor's actual repository permi
 
 ## Reward changes
 
-The bot snapshots the visible `## Reward` section when `/claim` succeeds. Those terms are locked for that active claim. If terms must change, release the claim, edit the Issue, and have the contributor claim again.
+When `/claim` succeeds, the bot records a snapshot and hash of the visible `## Reward` section. To change terms, release the claim, edit the Issue, and let the contributor decide whether to claim again. Confirm payout against the separate funding authorization.
 
 ## Permanent demand board: beyond H2
 
-H2 starts with 15 missions but is **not** a catalogue limit or a prerequisite for posting general approved work. Use `source:h2` only for actual H2 needs. Prefer `source:customer`/`source:mainnet` for verified general demands, `source:release` for external release coverage. A request from Anjoman is private until its owner explicitly permits a sanitized capability description to be used; review according to [DEMAND_INTAKE.md](DEMAND_INTAKE.md).
+H2 starts with 15 missions and remains one source of work rather than a catalogue limit. Use `source:h2` for H2 needs, `source:customer` or `source:mainnet` for verified general demand, and `source:release` for external release coverage. Anjoman requests remain private until their owner permits a sanitized capability description; review them according to [DEMAND_INTAKE.md](DEMAND_INTAKE.md).
 
-A **commercial Provider opportunity** is separate from a development bounty: mark `opportunity:provider`, keep commercial contact/terms outside Issues, and never assign a `/claim` or GitHub reward to it. The command bot rejects bounty commands on this label, including maintainer submission overrides. Other `work:miner` Issues may remain normal claimable adapter/implementation bounties. The commercial need must be verified before it is labeled as customer/mainnet demand.
+A **commercial Provider opportunity** uses `opportunity:provider` and keeps commercial contact and terms outside Issues. The command bot rejects bounty commands for this label, including maintainer submission overrides. Other `work:miner` Issues may remain claimable adapter or implementation bounties. Verify commercial demand before applying a customer or mainnet source label.
 
-For normal bounties, closing an Issue is evidence that the public acceptance test passed; it is **not** proof of Protocol Intent eligibility, independent supply, completion of an Anjoman customer job, or paid adoption. Re-run the original authorized application/job, check availability/evaluation/routing/payment, and only then allow the product owner to notify and reauthorize a retry. Record real paid usage unlocked separately from issue count. Do not expose raw diagnostic thresholds, private buyer details, evaluation weakness or sensitive input samples to prove importance.
+For normal bounties, closing an Issue records that its public acceptance test passed. Re-run the original authorized application or job and verify eligibility, availability, evaluation, routing and payment before the product owner notifies the customer or authorizes a retry. Record paid usage separately from Issue counts. Keep raw diagnostic thresholds, private buyer details, evaluation weaknesses and sensitive input samples in their authorized systems.

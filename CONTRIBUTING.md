@@ -4,7 +4,7 @@ The fastest path is an existing bounty issue.
 
 ## 1. Pick `status:open`
 
-Do not claim `status:triage` issues. Triage reports are proposals until a maintainer turns them into clear, verifiable work.
+Claim issues marked `status:open`. Triage reports remain proposals until a maintainer turns them into clear, verifiable work.
 
 Prefer:
 
@@ -23,7 +23,7 @@ Comment:
 
 The bot records the claimant and moves the issue to `status:claimed`.
 
-A claim coordinates work; it does not create permanent ownership. Post meaningful progress at least once every 72 hours:
+A claim reserves the Issue while work is active. Post meaningful progress at least once every 72 hours:
 
 ```text
 /progress Provider endpoint is live; integrating the reference fixtures now.
@@ -31,7 +31,7 @@ A claim coordinates work; it does not create permanent ownership. Post meaningfu
 
 Stale claims are warned, then automatically released.
 
-If you cannot continue:
+To return the Issue for another contributor:
 
 ```text
 /release
@@ -39,11 +39,11 @@ If you cannot continue:
 
 ## 3. Build against the acceptance criteria
 
-Do not optimize for the issue title. Optimize for the checklist.
+Build to the acceptance checklist rather than the Issue title alone.
 
-For Provider/Miner or Evaluator work, a repository existing is not proof. If the issue requires live Telegraph integration, it must actually serve/evaluate the specified Intent and pass the stated checks.
+For Provider/Miner or Evaluator work, provide working evidence. When an Issue requires live Telegraph integration, the submission must serve or evaluate the specified Intent and pass the stated checks.
 
-For App work, a mock is not enough when the issue requires a live paid request, receipt, settlement, autonomous flow or other end-to-end evidence.
+For App work, match the requested proof. Issues that require a live paid request, receipt, settlement, autonomous flow or other end-to-end evidence need a working demonstration.
 
 ## 4. Submit proof
 
@@ -69,7 +69,7 @@ A maintainer reproduces the acceptance criteria.
 - Needs changes: maintainer uses `/changes <reason>`; the issue returns to `status:claimed` with the same claimant and a fresh 72-hour progress window.
 - Cannot continue: `/release`
 
-Funded rewards are handled according to the reward terms locked when the active claim was created. The bot snapshots the Issue's `## Reward` section at `/claim` time.
+Funded rewards follow the terms recorded when the active claim was created. The bot stores a visible snapshot and hash of the Issue's `## Reward` section at `/claim` time; payout also requires independent funding authorization.
 
 ## Reporting a new gap
 
@@ -80,53 +80,49 @@ Use the Issue chooser. Describe:
 3. the reusable Intent/component involved, if known;
 4. what observable result would close it.
 
-For a major model/API/tool release, include the canonical release source and use existing Intents where they fit. Do not invent demand or require a particular ranking outcome. See [docs/RELEASE_COVERAGE.md](docs/RELEASE_COVERAGE.md).
+For a major model/API/tool release, include the canonical release source, use existing Intents where they fit, and define success as fair measurement rather than a preferred rank. See [docs/RELEASE_COVERAGE.md](docs/RELEASE_COVERAGE.md).
 
 Maintainers normalize proposals into the smallest reusable bounty.
 
 ## Contributing evaluation material
 
-Use the [Evaluation material issue form](.github/ISSUE_TEMPLATE/evaluation-material-gap.yml) for an evidenced gap, or pick a verified open Issue. Describe only the **public Category and general evaluation approach** in a GitHub Issue. Specific affected Intents, adapter/profile IDs, material/evidence gaps, freshness/source weaknesses, hidden questions and exact qualification targets must remain within an authorized private reviewer workflow. Submit actual material through V2 admission/qualification when applicable; a GitHub PR alone cannot change Canonical Evaluator state.
+Use the [Evaluation material issue form](.github/ISSUE_TEMPLATE/evaluation-material-gap.yml) for an evidenced gap, or pick a verified open Issue. A public Issue should identify the **Category and general evaluation approach**. Handle affected Intents, adapter/profile IDs, detailed coverage weaknesses, hidden questions and exact qualification targets through an authorized private reviewer workflow. Submit material through V2 admission and qualification when applicable; Canonical Evaluator state is managed by the protocol rather than GitHub.
 
-Use independent evidence when available, preserve upstream source provenance and distinguish verified reference observations from synthetic labels. Never expose hidden sampling questions/expected answers. An unranked Intent may still be routable, but must not display an invented quality ranking.
+Use independent evidence when available, preserve upstream source provenance and distinguish verified reference observations from synthetic labels. Keep hidden sampling questions and expected answers in the authorized review system. An unranked Intent may still be routable and should display that status accurately.
 
 The bounty repo aggregates repeated compatible Intent gaps rather than generating millions of issues. See [docs/EVALUATION_NEEDS.md](docs/EVALUATION_NEEDS.md).
 
-## Anti-slop rule
+## Contribution quality
 
-This repo is deliberately strict because incentives attract low-quality submissions.
+This repository expects focused, verifiable contributions:
 
-Do not:
-
-- open duplicate or speculative issues without evidence;
-- claim many bounties and sit on them;
-- submit generated code you have not run;
-- fabricate request IDs, transactions, benchmarks or screenshots;
-- turn every application output into a new Intent;
-- disclose exploitable vulnerabilities publicly.
+- search open and closed Issues before proposing work;
+- claim only work you can actively execute;
+- run and inspect generated code before submission;
+- provide authentic request IDs, transactions, benchmarks and screenshots;
+- propose a new Intent only for a reusable intelligence primitive;
+- report exploitable vulnerabilities through the private security channel.
 
 Repeated low-signal behavior may be closed without review.
 
 ## Security
 
-Follow [SECURITY.md](SECURITY.md). Never publish secrets or exploitable vulnerability details.
+Follow [SECURITY.md](SECURITY.md) for secrets and exploitable vulnerability details.
 
 
 ## Evaluation vulnerability and material disclosure
 
-Keep public proposals Category-level and nonsensitive. Do not include exact vulnerable Intent IDs, test distributions, missing reference counts, source concentration, hidden qualification inputs/answers, private diagnostic links or customer payloads. Share sensitive diagnostics with authorized maintainers by a secure private channel (see `SECURITY.md`). Public issue forms are designed for generalized contribution proposals; maintainers verify scope privately before opening/approving funded work.
+Keep public proposals at a nonsensitive Category level. Share exact affected Intent IDs, test distributions, missing reference counts, source concentration, hidden qualification inputs and answers, private diagnostic links, and customer payloads with authorized maintainers through the channel in [SECURITY.md](SECURITY.md). Maintainers verify sensitive scope privately before opening or approving funded work.
 
 ## Demand and Provider opportunities
 
-New requests are **not automatically funded or claimable**. Anjoman/user needs require prior authorization and a sanitized, non-sensitive public description; see [Demand intake](docs/DEMAND_INTAKE.md). Do not post private prompts, files, customer identity, real hidden evaluator cases, or exploitable weaknesses to prove a gap.
+New requests begin in triage. Anjoman and user needs require prior authorization and a sanitized public description; see [Demand intake](docs/DEMAND_INTAKE.md). Keep private prompts, files, customer identity, hidden evaluator cases and exploitable weaknesses in their authorized systems.
 
-`opportunity:provider` Issues invite already-operating independent services to discuss onboarding. They are commercial recruitment leads, **not** `/claim` development bounties. Follow the public contact instructions instead. For normal `status:open` bounties without that label, the existing claim/submit/verification rules remain unchanged.
+`opportunity:provider` Issues invite established independent services to discuss onboarding. They use the listed commercial contact path instead of the `/claim` development workflow. Other `status:open` bounties follow the claim, submit and verification process above.
 
 ## Pull requests
 
-Most bounty deliverables (a Miner, an Evaluator, an App) live in **your own repository**. Prove them with `/submit` on the Issue; do not open a PR here for them.
-
-Open a pull request to this repository when the change is to the repository itself:
+Most bounty deliverables—a Miner, Evaluator or App—live in **your own repository**. Submit their proof through `/submit` on the Issue. Open a pull request here when changing this repository itself:
 
 - catalogue fixes in `catalog/` (then run `python scripts/generate_docs.py`);
 - a proposed gap in `seed/h2-bounties.json` (it stays `publish: false` until a maintainer approves it);
@@ -134,19 +130,20 @@ Open a pull request to this repository when the change is to the repository itse
 - documentation and fictional examples under `examples/`;
 - a bounty whose Issue explicitly asks for a change here: reference it with `Closes #123`.
 
-Pull requests will be closed or redirected if they contain:
+Keep these materials out of public pull requests:
 
-- evaluation material, hidden cases or qualification data (a PR cannot change Canonical Evaluator state, and publishing it would leak it);
+- evaluation material, hidden cases or qualification data;
 - private diagnostics, customer data, credentials or exploit details;
 - edits to reward terms or approvals;
 - bulk generated changes nobody asked for.
 
 Run `python scripts/prepush.py` before pushing. CI runs the same check on Linux and Windows.
 
-Commands are accepted only when the bot posts its receipt. A maintainer may rerun
-the original canceled/failed command job; replaying an accepted command cannot
-create a second claim. Editing a command does not issue a new command. An independent
-maintainer must approve submissions, including work from repository collaborators.
+The bot receipt confirms that a command was accepted. A maintainer may rerun the
+original canceled or failed command job; replay protection prevents a second claim
+from the same accepted command. Editing a comment does not issue another command.
+Every submission requires approval from a maintainer other than its claimant and
+submitter.
 
 ## Working on this repository itself
 

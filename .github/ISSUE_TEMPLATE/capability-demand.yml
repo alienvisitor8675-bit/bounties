@@ -1,5 +1,5 @@
 name: Public-safe missing capability / customer need
-# This is a proposal, not a bounty, payment commitment or production capability announcement.
+# New reports begin as triage proposals.
 description: Propose a reusable missing capability using only information approved for public disclosure.
 title: "[Capability] "
 labels: ["status:triage", "reward:unfunded"]
@@ -7,33 +7,33 @@ body:
   - type: markdown
     attributes:
       value: |
-        This is a **public GitHub Issue**, not a private Anjoman job inbox. Do NOT paste customer identities, job prompts/files, credentials, budgets, contracts, payment records, hidden evaluator cases, per-Intent evaluation weaknesses or private diagnostics. Private needs must be reviewed/sanitized before publishing. No reward, demand commitment or new Intent is implied.
+        This is a **public GitHub Issue**. Publish only an authorized, sanitized description of the reusable capability. Customer identities, job prompts and files, credentials, budgets, contracts, payment records, hidden evaluator cases, per-Intent weaknesses and private diagnostics belong in their authorized systems. New reports begin as unfunded triage proposals.
   - type: textarea
     id: outcome
     attributes:
       label: Public-safe outcome or missing capability
-      description: Explain the reusable task at a broad level; do not identify private customers or unpublished internal measurements.
+      description: Explain the reusable task at a broad level using information approved for public disclosure.
     validations:
       required: true
   - type: input
     id: existing_intent
     attributes:
       label: Related existing Intent (if known)
-      description: Reuse an existing task where possible; leave blank if the right market needs review.
+      description: Reuse an existing task where possible. Leave blank when the right market needs review.
     validations:
       required: false
   - type: textarea
     id: public_evidence
     attributes:
       label: Publicly shareable evidence
-      description: Cite a public source, test with synthetic inputs or generic technical reproduction. Mark fictional examples. Do not claim a signed buyer or funded reward unless independently approved.
+      description: Cite a public source, synthetic-input test or generic technical reproduction. Mark fictional examples and state funding or buyer commitments only after independent approval.
     validations:
       required: true
   - type: textarea
     id: acceptance
     attributes:
       label: Safe observable outcome / acceptance outline
-      description: What would show useful completion without disclosing proprietary requests or evaluation attacks? Maintainers verify exact details privately where needed.
+      description: Describe a public result that demonstrates useful completion. Maintainers verify proprietary requests and sensitive evaluation details privately when needed.
     validations:
       required: true
   - type: checkboxes

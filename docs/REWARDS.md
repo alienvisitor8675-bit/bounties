@@ -1,6 +1,6 @@
 # Reward model
 
-A bounty reward exists only when the Issue explicitly defines it.
+Each Issue states whether its bounty is funded. A funded reward requires complete terms in the Issue.
 
 Paid bounties spell out the terms up front so contributors know whether an issue is paid, how much it pays, and what completion means.
 
@@ -21,35 +21,30 @@ A funded bounty should define:
 | `payout_window` | When payout is expected after approval. |
 | `payout_proof` | Added after payment where appropriate. |
 
-## Claim-time reward lock
+## Claim-time reward record
 
-When `/claim` succeeds, the Telegraph bot records a SHA-256 hash and a visible snapshot of the Issue's `## Reward` section in the trusted claim comment.
+When `/claim` succeeds, the Telegraph bot records a SHA-256 hash and visible snapshot of the Issue's `## Reward` section in the claim receipt.
 
-**Those claim-time reward terms are immutable for that active claim.** Editing the Issue later does not silently change what the claimant accepted.
+The claim receipt preserves the terms the contributor accepted, independently of later edits to the Issue body. GitHub comments remain mutable, so the receipt is an audit record rather than a tamper-proof ledger or proof of funding. Before payment, compare it with the independently authorized funding and payout records described in [FUNDED_LAUNCH.md](maintainers/FUNDED_LAUNCH.md).
 
-This is a commitment not to change accepted terms retroactively. The snapshot is
-stored in a GitHub comment, which privileged users can edit or delete; it is not a
-tamper-proof ledger or proof of funding. Independently authorized funding and payout
-records must be checked before payment. See [FUNDED_LAUNCH.md](maintainers/FUNDED_LAUNCH.md).
-
-If reward terms genuinely need to change, release the claim, update the Issue, and let the contributor claim again under the new terms. Do not retroactively reduce or alter a live claim's reward terms.
+To change reward terms, release the active claim, update the Issue, and let the contributor decide whether to claim again under the new terms. Existing claims retain their recorded terms.
 
 ## Cross-denomination payouts
 
-If the stated denomination and payout asset are different, the Issue must include an explicit conversion rule before it is published.
+When the stated denomination and payout asset differ, the Issue must include an explicit conversion rule before publication.
 
 Examples:
 
 - `500 USD`, paid in `USDC` → state the exact USD/USDC convention used at payout.
 - `500 USD`, paid in `MACHINA` → state the price source, observation window/time, rounding rule, and any fallback/circuit-breaker behavior required to determine the MACHINA amount.
 
-If the conversion rule is missing, the funded bounty is invalid and repository validation must fail.
+Repository validation rejects a funded bounty with a missing conversion rule.
 
 This bounty rule does not change Telegraph protocol economics. Consumer activity remains USDC-denominated; a bounty payout asset is only the asset used for that bounty reward.
 
-## No implied token promises
+## Token-denominated rewards
 
-If a bounty is stated as `$500`, that does **not** imply a specific MACHINA amount unless the Issue explicitly states the conversion rule and payout asset.
+A bounty stated as `$500` promises a MACHINA amount only when the Issue also defines MACHINA as the payout asset and provides the conversion rule.
 
 If future MACHINA-denominated or IOU-style rewards are introduced, their terms must be written on the issue before contributors claim it.
 
@@ -61,9 +56,9 @@ If the network needs N independent Miners, Evaluators, or implementations, creat
 
 The bot serializes commands and scheduled releases in a shared Actions queue and
 records accepted transitions before updating labels. Retrying the original job
-repairs partial updates without accepting its source comment twice. This depends on
-the deployed workflows using that shared queue; GitHub API updates are not a database
-transaction. Do not advertise parallel `max_awards > 1` on a single Issue.
+repairs partial updates while replay protection prevents duplicate acceptance of its
+source comment. This depends on the deployed workflows using that shared queue;
+GitHub API updates are separate operations. Use one slot Issue per award.
 
 ## Payout state
 
@@ -73,12 +68,12 @@ Recommended labels:
 - `reward:unfunded`
 - `reward:paid`
 
-The `reward:funded` label is not enough by itself; the issue body remains authoritative until a claim is created, after which the bot's claim-time reward snapshot locks the terms for that active claim.
+The Issue body is authoritative before a claim. After `/claim`, its receipt records the accepted terms for that active claim; the separate funding ledger remains authoritative for payment authorization.
 
 ## Evaluation-material opportunity rewards
 
-A Category/Intent evaluation-gap alert is not a funded bounty. Generated issues are `status:triage` and `reward:unfunded` until a maintainer separately approves scope **and explicitly funds** a reward under this document. Protocol V2 demand-backed Evaluator emissions are a distinct mechanism tied to Canonical Evaluator eligibility and qualified external paid Consumer demand, not an automatic payout for submitted material, a GitHub claim or closing an issue.
+A Category/Intent evaluation-gap alert begins as `status:triage` and `reward:unfunded`. Funding requires separate scope approval and complete terms under this document. Protocol V2 demand-backed Evaluator emissions are a distinct mechanism tied to Canonical Evaluator eligibility and qualified external paid Consumer demand; GitHub activity does not create protocol emissions.
 
-## Commercial Provider opportunities are not bounty rewards
+## Commercial Provider opportunities
 
-`opportunity:provider` describes qualified recruitment/onboarding of an already-operating API/model/data service; it is not a one-claim/one-award developer bounty. The GitHub `/claim`, `/submit` and `/approve` lifecycle is disabled for these Issues. Any commercial negotiations, compensation or customer commitments must be explicitly handled and approved outside this public repository. `reward:unfunded` means **no reward is committed**; demand or a proposed MACHINA award does not change that.
+`opportunity:provider` describes recruitment and onboarding for an established API, model or data service. These Issues use a commercial process outside the GitHub `/claim`, `/submit` and `/approve` lifecycle. Handle negotiations, compensation and customer commitments through the authorized commercial process. The `reward:unfunded` label means the Issue carries no bounty payment commitment.

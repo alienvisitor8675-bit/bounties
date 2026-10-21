@@ -68,11 +68,10 @@ module.exports = async function runBountyCommand({ github, context }) {
     return maintainerPermission;
   }
 
-  // An approved Provider recruitment listing is not a development bounty or an award.
-  // Do not let either ordinary contributors or maintainer overrides use the bounty claim/submit lifecycle.
+  // Provider recruitment follows a separate commercial process, so bounty commands are unavailable.
   if (labelNames().includes('opportunity:provider') &&
       ['/claim', '/progress', '/release', '/submit', '/changes', '/approve'].includes(command)) {
-    await comment('This is a commercial Provider onboarding opportunity, not a claimable GitHub bounty. Please follow its public contact instructions; onboarding and any terms are coordinated separately.');
+    await comment('This is a commercial Provider onboarding opportunity. Follow its public contact instructions; onboarding and any terms are coordinated through the separate commercial process.');
     return;
   }
 
@@ -93,8 +92,8 @@ module.exports = async function runBountyCommand({ github, context }) {
     }
     const rewardHash = reward.sha256 || 'none';
     const rewardText = reward.text
-      ? `\n\n**Reward terms locked for this claim** (SHA-256 \`${rewardHash}\`):\n${quoteMarkdown(reward.text)}`
-      : '\n\n**Reward terms locked for this claim:** no explicit `## Reward` section was present at claim time.';
+      ? `\n\n**Reward terms recorded for this claim** (SHA-256 \`${rewardHash}\`):\n${quoteMarkdown(reward.text)}`
+      : '\n\n**Reward terms recorded for this claim:** the Issue had no explicit `## Reward` section at claim time.';
 
     await transition(
       `<!-- telegraph-claim user="${actor}" at="${now}" reward_sha256="${rewardHash}" -->\n` +
@@ -215,10 +214,10 @@ module.exports = async function runBountyCommand({ github, context }) {
       return;
     }
     if ([state.claimant, state.lastSubmitter].some(user => user?.toLowerCase() === actor.toLowerCase())) {
-      await comment('An independent maintainer must review and approve this submission. Claimants and submitters cannot approve their own work.');
+      await comment('This submission requires an independent maintainer. The claimant and submitter are ineligible to approve it.');
       return;
     }
-    await transition(`<!-- telegraph-approve user="${actor}" at="${now}" -->\nVerified and approved by @${actor}. Bounty complete. This does not authorize or execute a payout.`);
+    await transition(`<!-- telegraph-approve user="${actor}" at="${now}" -->\nVerified and approved by @${actor}. Bounty complete. Payment, when applicable, follows the separate funding and treasury process.`);
     return;
   }
 };

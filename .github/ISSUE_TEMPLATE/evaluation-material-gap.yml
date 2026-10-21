@@ -1,17 +1,17 @@
 name: Evaluation contribution opportunity (public / nonsensitive)
-description: Propose broad Category-level evaluation work. Never publish detailed Intent vulnerabilities or coverage metrics.
+description: Propose public, Category-level evaluation material or methodology.
 title: "[Evaluation] "
 labels: ["work:evaluator", "gap:evaluation", "status:triage"]
 body:
   - type: markdown
     attributes:
       value: |
-        **Public-safe form only.** Do not include vulnerable Intent IDs, exact missing-case distributions, material/quality counters, private evidence URLs, hidden samples, reference answers, qualification thresholds, personal/customer data or exploit details. Send sensitive specifics privately using SECURITY.md.
+        This form creates a public Issue. Describe the Category and general contribution here; share affected Intent IDs, detailed coverage metrics, private evidence URLs, hidden samples, reference answers, qualification thresholds, personal or customer data, and exploit details through the private channel in SECURITY.md.
   - type: input
     id: category
     attributes:
       label: Public Category
-      description: Identify a broadly supported Category, not an exploitable Intent-specific weakness.
+      description: Identify the broadly supported Category for this contribution.
       placeholder: e.g. weather-intelligence
     validations:
       required: true
@@ -19,20 +19,20 @@ body:
     id: contribution
     attributes:
       label: Public contribution proposal
-      description: Describe only a general, safe-to-share contribution (e.g. evaluation references or methodology). No exact deficits or hidden sources.
+      description: Describe a public contribution such as reference material, methodology or a compatible evaluation approach.
     validations:
       required: true
   - type: textarea
     id: evidence
     attributes:
       label: Nonsensitive proof or examples
-      description: Optional published documentation or generic example. Privately share sensitive details with maintainers, not GitHub Issues.
+      description: Add published documentation or a generic example. Use the private security channel for sensitive details.
     validations:
       required: false
   - type: textarea
     id: public_acceptance
     attributes:
       label: Public acceptance outline
-      description: State safe, general outcomes; maintainers will confirm exact criteria in an authorized private review before opening a claimable bounty.
+      description: State public, general outcomes. Maintainers confirm sensitive criteria through an authorized review before opening a claimable bounty.
     validations:
       required: true

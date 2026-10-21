@@ -6,7 +6,7 @@ body:
   - type: markdown
     attributes:
       value: |
-        **Public-safe report only.** Do not publish a private customer/Anjoman job, user files, private request IDs, secrets, customer budgets, internal evaluations, hidden test answers, precise evaluator weaknesses or exploitable infrastructure details. Give only authorized, sanitized reproduction evidence. Maintainers review specifics privately.
+        This Issue is public. Use authorized, sanitized reproduction evidence and keep customer or Anjoman jobs, user files, private request IDs, secrets, budgets, internal evaluations, hidden test answers, precise evaluator weaknesses and exploitable infrastructure details in the appropriate private system.
   - type: input
     id: intent
     attributes:
@@ -19,7 +19,7 @@ body:
     id: blocked
     attributes:
       label: What real demand is blocked or degraded?
-      description: Describe only the approved public outcome or broad need. Do not name a customer or private job without permission.
+      description: Describe the approved public outcome or broad need. Name a customer or private job only with documented permission.
       placeholder: "Resources & Agriculture app cannot complete because..."
     validations:
       required: true
@@ -27,13 +27,13 @@ body:
     id: evidence
     attributes:
       label: Evidence
-      description: Only safe public evidence; no private request IDs, internal ranking diagnostics or detailed evaluator failure patterns.
+      description: Provide public evidence. Share private request IDs, internal ranking diagnostics and detailed evaluator failure patterns through the authorized private channel.
     validations:
       required: true
   - type: textarea
     id: acceptance
     attributes:
       label: What observable result would close the gap?
-      description: Public-safe observable outcome. Sensitive acceptance tests are reviewed privately.
+      description: State the public observable outcome. Sensitive acceptance tests are reviewed privately.
     validations:
       required: true

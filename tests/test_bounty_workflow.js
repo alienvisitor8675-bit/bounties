@@ -161,7 +161,7 @@ async function testProviderRecruitmentCannotBeClaimed() {
   assert(h.state.issue.labels.includes('status:open'));
   assert(!h.state.issue.labels.includes('status:claimed'));
   assert.strictEqual(parseState(h.state.comments).claimant, null);
-  assert(h.state.comments.at(-1).body.includes('not a claimable GitHub bounty'));
+  assert(h.state.comments.at(-1).body.includes('separate commercial process'));
 }
 
 async function testProviderRecruitmentCannotBeApprovedByMaintainer() {

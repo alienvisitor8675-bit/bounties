@@ -8,9 +8,9 @@ Telegraph is a peer-to-peer ranking protocol for machine intelligence. This repo
 
 > **Gap found → public Issue → builder claims → builds → submits proof → maintainer verifies → capability gets stronger.**
 
-No reward exists unless an Issue says so. **At launch, no bounty is funded.** Funded rewards, when they appear, are written on the Issue with the amount, asset and rules before anyone can claim them.
+Each Issue states its reward status. **At launch, every bounty is unfunded.** Future funded rewards will publish the amount, asset and rules before claims open.
 
-This repository does **not** contain Telegraph's private core protocol, and it is not a vulnerability-disclosure program. See [SECURITY.md](SECURITY.md) for the latter.
+This repository contains the public contribution board and its tooling. Report vulnerabilities through the private channel in [SECURITY.md](SECURITY.md).
 
 ---
 
@@ -39,7 +39,7 @@ Miners and Evaluators work **per Intent**, independent of industry. Apps work **
 5. **Submit** proof with `/submit <links and evidence>`.
 6. A maintainer reproduces your result, then runs `/approve` or returns it with `/changes <reason>`.
 
-A bounty is done when its acceptance criteria are **reproducibly met**, not when code exists. Closing an Issue does not by itself make an Intent or Provider eligible on the network. Details: [CONTRIBUTING.md](CONTRIBUTING.md).
+A bounty is complete when its acceptance criteria are **reproducibly met**. Protocol eligibility remains a separate network decision. Details: [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ## Start here
 
@@ -59,7 +59,7 @@ A bounty is done when its acceptance criteria are **reproducibly met**, not when
 | Find all documentation | [Docs index](docs/README.md) |
 | Use this repo from an agent or script | [AGENTS.md](AGENTS.md) · [Integration](docs/INTEGRATION.md) |
 
-Provider recruitment listings (`opportunity:provider`) invite already-operating services to talk about onboarding. They are **not** claimable bounties.
+Provider recruitment listings (`opportunity:provider`) are for established services exploring onboarding. Their commercial process runs outside the bounty claim workflow.
 
 ## Explore from the command line
 
@@ -83,16 +83,16 @@ Live board commands need the [GitHub CLI](https://cli.github.com/) signed in (`g
 
 ## Rewards
 
-A reward exists **only when the Issue defines it**, using these fields: amount, denomination, payout asset, an explicit conversion rule when they differ, one award per Issue, eligibility, verification condition and payout window. The reward text is hashed and locked into your claim when you `/claim`, so later edits cannot change what you accepted.
+A funded Issue defines the amount, denomination, payout asset, conversion rule when needed, eligibility, verification condition and payout window. When you `/claim`, the bot records a visible snapshot and SHA-256 hash of those terms. Maintainers compare that record with the separate funding authorization before payout.
 
-No implied token amounts. Nothing here promises compensation unless an Issue states it. See [docs/REWARDS.md](docs/REWARDS.md).
+An unfunded Issue carries no payment commitment. See [docs/REWARDS.md](docs/REWARDS.md).
 
-## What the board will not do
+## Board boundaries
 
-- Create speculative Issues. Every gap starts from real demand, an observed failure or a verified release.
-- Publish private customer data, hidden evaluation material or per-Intent weaknesses. See [SECURITY.md](SECURITY.md) and [docs/DEMAND_INTAKE.md](docs/DEMAND_INTAKE.md).
-- Treat an Issue as proof of a paying buyer, a funded reward or a production-ready capability.
-- Change protocol state. GitHub coordinates work; the Telegraph network decides eligibility and rankings.
+- Issues begin with real demand, an observed failure or a verified release gap.
+- Public reports use authorized, sanitized evidence. [SECURITY.md](SECURITY.md) and [docs/DEMAND_INTAKE.md](docs/DEMAND_INTAKE.md) explain the private reporting paths.
+- Each Issue states its funding status and acceptance criteria.
+- GitHub coordinates contributions; Telegraph's production systems decide eligibility and rankings.
 
 ## Project health
 
@@ -114,4 +114,4 @@ make seed-h2                 # publish only approved Season II seed items
 make launch-check            # offline gate: refuses to pass with an empty board
 ```
 
-Runbooks live in [docs/maintainers](docs/maintainers/README.md): triage, launch, GitHub settings and the evaluation pipeline. **Never announce an empty bounty board.**
+Runbooks live in [docs/maintainers](docs/maintainers/README.md): triage, launch, GitHub settings and the evaluation pipeline. Announce the board after it contains approved, useful work.

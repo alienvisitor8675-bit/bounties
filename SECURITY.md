@@ -1,6 +1,6 @@
 # Security Policy
 
-**Do not open a public GitHub Issue for an exploitable vulnerability, secret, private key, credential, bypass, or sensitive infrastructure detail.**
+**Report exploitable vulnerabilities, secrets, credentials, bypasses and sensitive infrastructure details privately.**
 
 ## Report a vulnerability
 
@@ -14,7 +14,7 @@ Use the subject:
 [SECURITY] Telegraph vulnerability report
 ```
 
-Include only the minimum information needed to establish impact in the first message. The Telegraph team can coordinate a safer channel for additional material.
+In the first message, include the minimum information needed to establish impact. The Telegraph team will coordinate a secure channel for additional material.
 
 If this repository has GitHub private vulnerability reporting enabled, you may use the **Security** tab instead.
 
@@ -26,22 +26,22 @@ In scope for reports to this repository:
 - the evaluation-opportunity and publication scripts (`scripts/*.py`), including any path that could expose private diagnostics, hidden material or the publication key;
 - leaked credentials, keys or private data in the repository or its history.
 
-Out of scope here: the private Telegraph protocol implementation, deployed network components and third-party services. Report those through the same email and the team will route them.
+For the private Telegraph protocol, deployed network components and third-party services, use the same email and the team will route the report.
 
 ## Good-faith research
 
-Please avoid accessing, modifying or destroying data that is not yours, avoid degrading service for others, and stop and report as soon as you confirm an issue. Give the team reasonable time to respond before any public disclosure.
+Limit testing to accounts and data you control, preserve service availability, and stop once you confirm the issue. Report promptly and allow reasonable time for a response before public disclosure.
 
 ## Rewards
 
-This policy does not establish a bug-bounty program. Eligibility for any reward is decided only by explicit terms communicated for a specific report. Do not assume a reward unless one has been stated.
+This is a vulnerability-disclosure policy rather than a standing bug-bounty program. A report qualifies for a reward only when Telegraph provides explicit terms for that report.
 
 Public Issues may be used for non-sensitive hardening work **after** sensitive details are removed or the underlying vulnerability is fixed.
 
 ## Evaluation-gap disclosure boundary
 
-Treat per-Intent evaluation diagnostics as **internal** even when they are derived from public chain data. Do **not** copy raw node/indexer snapshots, profile thresholds, exact source concentration, missing-case distributions, stale-material details, request examples, score instability reports, or hidden qualification content into Issues, comments, pull requests, build logs, or GitHub artifacts.
+Treat per-Intent evaluation diagnostics as **internal** even when derived from public chain data. Keep raw node/indexer snapshots, profile thresholds, source concentration, missing-case distributions, stale-material details, request examples, score-instability reports and hidden qualification content out of Issues, comments, pull requests, build logs and GitHub artifacts.
 
-Public automated opportunities may include only a broadly published Category, generic invitation to contribute compatible evaluation methods/material, review-only/unfunded status, and an opaque keyed identifier. The publisher enforces a strict schema and requires a stable private `TELEGRAPH_BOUNTY_PUBLICATION_KEY` for live GitHub creation. Keep the key in the protected operator/CI secret store; never in Git history or artifacts. Restrict raw telemetry to an authorized indexer and minimize upstream collection. A GitHub approval is **not** a decision that an evaluation is accurate.
+Public automated opportunities contain a broad Category, a general invitation to contribute compatible evaluation methods or material, review-only/unfunded status, and an opaque keyed identifier. The publisher enforces this schema and requires a stable private `TELEGRAPH_BOUNTY_PUBLICATION_KEY` for live GitHub creation. Store the key in the protected operator environment, outside Git history and artifacts. Restrict raw telemetry to an authorized indexer and minimize upstream collection. Evaluation accuracy is decided through the protocol review process rather than GitHub approval.
 
-These restrictions cannot conceal anything that V2 already makes publicly reconstructable on-chain. They limit **additional** disclosure through this repository; genuine resistance to adversarial evaluation also requires adequate data provenance, independent qualification and non-public sampling where supported.
+Information already reconstructable from V2's public chain remains public. These controls limit additional disclosure through this repository; resistance to adversarial evaluation also depends on strong data provenance, independent qualification and private sampling where supported.

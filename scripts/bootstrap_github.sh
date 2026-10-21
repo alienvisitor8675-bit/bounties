@@ -83,5 +83,5 @@ for mission in exchange stablecoin institutional-markets legal conflict-intellig
 done
 
 echo "Done."
-echo "Next: triage public-safe ongoing work via Issue Forms; use make seed-h2 only for approved Season II seed items."
+echo "Next: triage approved public work through Issue Forms; use make seed-h2 only for approved Season II seed items."
 echo "Manual launch step: upload assets/social-preview.png as the GitHub social preview."

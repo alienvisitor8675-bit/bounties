@@ -1,6 +1,6 @@
 # GitHub repository settings checklist
 
-Workflows and config files in this repo cannot enable these controls. A repository admin applies them once after the repo is created, then re-checks them before announcing it. Settings are under **Settings** unless noted.
+A repository admin applies these server-side controls after creation and verifies them before announcement. Repository workflows and configuration files cover the corresponding code-level controls. Settings are under **Settings** unless noted.
 
 Importable examples are in `.github/security/main-ruleset.json` and
 `.github/security/release-ruleset.json`. Confirm the configured code owners can
@@ -22,14 +22,14 @@ for deployment verification, treasury separation and the funded-launch gate.
   - `analyze (javascript-typescript)`, `analyze (python)`, `analyze (actions)`
 - [ ] Require linear history
 - [ ] Require signed commits (optional)
-- [ ] Do not allow bypass, including admins, except a named break-glass role
+- [ ] Limit bypass to a named break-glass role; administrators follow the ruleset
 
 Check names must match the job names in `.github/workflows/`. If you rename a job, update this list.
 
 ## 2. Actions (Actions → General)
 
-- [ ] Allow only actions created by GitHub, plus selected actions if you add any; require actions to be pinned to a full commit SHA
-- [ ] Workflow permissions: **Read repository contents** (default); do not allow Actions to create or approve pull requests
+- [ ] Allow GitHub-authored and explicitly selected actions; pin every external action to a full commit SHA
+- [ ] Workflow permissions: **Read repository contents** (default); leave pull-request creation and approval disabled
 - [ ] Fork pull requests: **require approval for all outside collaborators**
 - [ ] Send write tokens or secrets to fork PR workflows: **off**
 
@@ -41,22 +41,22 @@ The bounty-command workflow runs on `issue_comment` with `issues: write`, so kee
 - [ ] Dependabot security updates (version updates come from `.github/dependabot.yml`)
 - [ ] Secret scanning and **push protection**
 - [ ] Private vulnerability reporting (the Security tab path named in `SECURITY.md`)
-- [ ] Code scanning: CodeQL runs from `.github/workflows/codeql.yml`; do not also enable default setup
+- [ ] Code scanning: use `.github/workflows/codeql.yml` and leave CodeQL default setup disabled
 
 ## 4. Access
 
 - [ ] Base permission for members: **Read**
-- [ ] Maintainers hold **Write** or higher through a team, not individual grants. Anyone with Write can run `/open`, `/approve` and `/release`; review the list regularly
-- [ ] Two or more admins; no shared accounts
+- [ ] Maintainers receive **Write** or higher through a team. Anyone with Write can run `/open`, `/approve` and `/release`; review membership regularly
+- [ ] Two or more admins, each using an individual account
 - [ ] Require two-factor authentication for privileged accounts; use organization enforcement when organization-owned
 - [ ] Use passkeys or hardware security keys for privileged accounts; test recovery
-- [ ] Separate work review and treasury signing; no claimant/submitter self-approval
+- [ ] Separate work review and treasury signing; approval comes from someone other than the claimant and submitter
 
 ## 5. Secrets and environments
 
-- [ ] No repository secrets are needed for the workflows in this repo
-- [ ] `TELEGRAPH_BOUNTY_PUBLICATION_KEY` lives only in the operator's protected secret store, never in repository or organisation secrets accessible to pull requests
-- [ ] Raw evaluation snapshots and profiles are never committed or attached to workflow runs
+- [ ] Keep repository secrets empty for the workflows in this repository
+- [ ] Store `TELEGRAPH_BOUNTY_PUBLICATION_KEY` in the operator's protected secret store, outside secrets available to repository pull requests
+- [ ] Keep raw evaluation snapshots and profiles out of commits and workflow artifacts
 
 ## 6. Labels, features and discovery
 
@@ -68,6 +68,6 @@ The bounty-command workflow runs on `issue_comment` with `issues: write`, so kee
 ## 7. Dry run before announcing
 
 - [ ] On a disposable Issue, test `/open`, `/claim`, `/progress`, `/submit`, `/changes`, `/approve`, `/release`
-- [ ] Confirm a non-maintainer cannot run `/open`, `/approve` or `/changes`
+- [ ] Confirm `/open`, `/approve` and `/changes` reject users without maintainer permission
 - [ ] Confirm `opportunity:provider` Issues reject `/claim`
 - [ ] Open a test PR and confirm every required check runs and blocks merge on failure

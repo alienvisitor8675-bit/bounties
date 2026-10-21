@@ -8,26 +8,26 @@ This repository is where those concrete gaps can become public bounties.
 
 ## What counts as a real release-coverage gap
 
-A release-coverage bounty needs evidence, not hype. It should identify:
+A release-coverage bounty should identify:
 
 1. a real, externally verifiable release;
 2. the existing Telegraph Intent(s) where the release can reasonably compete, or a clear reason Intent triage is needed;
 3. the specific missing integration, evaluation, tooling, capacity or reliability work;
 4. objective acceptance criteria that make the release eligible for fair measurement.
 
-A major release can be time-sensitive even when no private customer is named. The evidence is the release itself plus the concrete market-coverage gap. Do **not** invent customer demand, budget, endorsement or usage to justify a bounty.
+A major release can be time-sensitive even when no private customer is named. The release and the concrete market-coverage gap provide the evidence; customer demand, budget, endorsement and usage claims require their own verification.
 
 ## Reuse the existing market first
 
-A new model version is not automatically a new Intent.
+A new model version usually competes through an existing Intent.
 
 If the task is already represented by an existing Intent, integrate the new Provider into that market. Create or revise an Intent only when the task itself is materially different or the existing definition cannot measure it defensibly.
 
-Telegraph does not require one universal Provider output schema at the protocol layer. Provider-native interfaces may differ; app/Anjoman/adapters can normalize outputs where a consuming workflow needs a common shape.
+Provider-native interfaces may differ. Apps, Anjoman and adapters can normalize outputs when a consuming workflow needs a common shape.
 
-## The bounty closes on fair eligibility, not on winning
+## The bounty closes on fair eligibility
 
-The acceptance criteria must never require a Provider to become `#1`, beat an incumbent, or produce a predetermined ranking.
+Acceptance criteria should establish that the Provider can be measured fairly under the same rules as other eligible supply.
 
 Good acceptance criteria prove things such as:
 
@@ -35,17 +35,17 @@ Good acceptance criteria prove things such as:
 - the release is registered against the correct existing Intent/version;
 - reference and hidden evaluation cases execute correctly;
 - any required app-facing normalization works without changing Provider-native semantics;
-- no Provider-specific scoring exception was introduced;
+- scoring uses the standard market rules;
 - the ranking can be reproduced under the same rules as other eligible supply;
 - required latency, reliability or capacity thresholds are met where they are part of the market definition.
 
-The measured result may be `#1`, `#7`, unchanged from the previous version, or otherwise unremarkable. The bounty is complete when Telegraph can measure the release fairly—not when the result is dramatic.
+The measured result may be `#1`, `#7` or unchanged from the previous version. The bounty is complete when Telegraph can measure the release fairly.
 
 ## Priority
 
 Use `source:release` for these issues.
 
-A release gap may be `priority:p0` when the release is materially important to a live Telegraph market and the useful measurement window is time-sensitive. Do not mark every model announcement P0. P1/P2 remain appropriate when the market impact is narrower or the work can wait.
+A release gap may be `priority:p0` when it is materially important to a live Telegraph market and the useful measurement window is time-sensitive. Use P1 or P2 for narrower impact or work that can wait.
 
 Work/gap labels should still describe the actual missing piece:
 
@@ -76,7 +76,7 @@ maintainer verifies fair eligibility
 Telegraph can run the normal evaluation/ranking path
 ```
 
-If a time-sensitive, strategically important gap is not picked up quickly enough, maintainers may complete the work internally and use the same `/submit` → verification → `/approve` path. The bounty system is leverage; it must not make the public market stale.
+For a time-sensitive strategic gap, maintainers may complete the work internally and use the same `/submit` → verification → `/approve` path.
 
 ## Public proof after completion
 
@@ -89,10 +89,10 @@ Examples:
 - "The incumbent remained #1 after Release Z entered."
 - "A new Evaluator changed the ranking after adding valid coverage for Release X."
 
-Link to the exact market/result where possible. Never turn a completed integration bounty into a fabricated performance claim.
+Link to the exact market or result and state only the performance that was measured.
 
 ### Historical receipt vs current status
 
 A release event should preserve what was actually measured at that moment. A historical receipt should bind, where available, the exact Provider/release version, Intent/version, Evaluator/version, ranking round or timestamp, and measured result. If the claim says a rank changed, preserve the comparison point as well.
 
-A live/current rank object is different. It should clearly identify itself as current and update or expire when ranking state changes. Never let an old `#1` event receipt silently present itself as the Provider's current rank.
+A live rank object should identify itself as current and update or expire when ranking state changes. Historical receipts retain their original timestamp and measurement context.

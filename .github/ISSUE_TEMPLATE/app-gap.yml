@@ -6,7 +6,7 @@ body:
   - type: markdown
     attributes:
       value: |
-        **Public-safe report only.** Do not publish a private customer/Anjoman job, user files, private request IDs, secrets, customer budgets, internal evaluations, hidden test answers, precise evaluator weaknesses or exploitable infrastructure details. Give only authorized, sanitized reproduction evidence. Maintainers review specifics privately.
+        This Issue is public. Use authorized, sanitized reproduction evidence and keep customer or Anjoman jobs, user files, private request IDs, secrets, budgets, internal evaluations, hidden test answers, precise evaluator weaknesses and exploitable infrastructure details in the appropriate private system.
   - type: input
     id: app
     attributes:
@@ -18,14 +18,14 @@ body:
     id: outcome
     attributes:
       label: What is supposed to work?
-      description: Describe the end-to-end outcome, not just the technical symptom.
+      description: Describe the end-to-end outcome and the technical symptom.
     validations:
       required: true
   - type: textarea
     id: blocker
     attributes:
       label: What blocks it?
-      description: Describe the reusable blocker broadly; do not expose private routing/evaluation/security diagnostics.
+      description: Describe the reusable blocker broadly. Share sensitive routing, evaluation or security diagnostics through the private reporting channel.
     validations:
       required: true
   - type: textarea

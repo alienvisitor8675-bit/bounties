@@ -1,5 +1,5 @@
 name: Independent Provider recruitment opportunity
-# This is not a claimable code bounty.
+# This form is for commercial Provider recruitment.
 description: Suggest onboarding an existing commercial machine-callable service for verified demand.
 title: "[Provider opportunity] "
 labels: ["work:miner", "opportunity:provider", "status:triage", "reward:unfunded"]
@@ -7,33 +7,33 @@ body:
   - type: markdown
     attributes:
       value: |
-        **Not a claimable bounty.** This is a public-safe Provider recruitment lead for an already-existing service. Do not publish private buyers, budgets, API credentials, contracts, hidden evaluation weaknesses or live request payloads. A maintainer must confirm eligibility and any buyer demand before changing status.
+        This is a public recruitment lead for an established service and uses the commercial onboarding path. Keep private buyers, budgets, API credentials, contracts, hidden evaluation weaknesses and live request payloads in their authorized systems. A maintainer confirms eligibility and buyer demand before changing status.
   - type: input
     id: capability
     attributes:
       label: Service type or existing Intent
-      description: State the broad task and any already-known public Intent. Do not invent a new Intent for each Provider.
+      description: State the broad task and any known public Intent. Propose a new Intent only when the task itself is a reusable intelligence primitive.
     validations:
       required: true
   - type: textarea
     id: usefulness
     attributes:
       label: Why existing supply may be useful
-      description: Publicly verifiable market gap or broad use case only. Do not imply a guaranteed customer, funded order or ranking.
+      description: Cite a publicly verifiable market gap or broad use case. State customer, funding and ranking claims only when independently verified.
     validations:
       required: true
   - type: textarea
     id: availability
     attributes:
       label: Public integration information
-      description: Public endpoint documentation, access terms, data format and conditions, without secrets or bypass instructions.
+      description: Link public endpoint documentation, access terms, data formats and conditions. Send credentials through an approved private channel.
     validations:
       required: true
   - type: textarea
     id: success
     attributes:
       label: What would count as a usable onboarding?
-      description: At a general level, demonstrate approved service connectivity, valid Intent fit, eligibility and a working example; no promised winner or earnings.
+      description: At a general level, demonstrate approved service connectivity, valid Intent fit, eligibility and a working example. Evaluation determines ranking independently.
     validations:
       required: true
   - type: checkboxes

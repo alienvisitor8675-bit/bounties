@@ -1,9 +1,8 @@
 #!/usr/bin/env python3
 """Produce bounded, reviewable, grouped bounty opportunities from an external state export.
 
-Never reads hidden test questions/answers; never asserts that admitted labels are true.
-Pure offline tool, no GitHub mutations. Input snapshots are evidence *claims* that must
-be verified by maintainers before an Issue is made claimable.
+This offline tool operates on aggregate observations and leaves hidden test material
+and GitHub state untouched. Maintainers verify input claims before opening an Issue.
 """
 import argparse
 import datetime as dt
@@ -201,15 +200,14 @@ def main():
     a = argparse.ArgumentParser(description=__doc__)
     a.add_argument('--profiles', required=True)
     a.add_argument('--snapshot', required=True, help='newline-delimited JSON, one observed Intent per line')
-    a.add_argument('--output', help='write PUBLIC-SAFE Category-level JSON (default stdout)')
+    a.add_argument('--output', help='write the public Category-level JSON projection (default stdout)')
     a.add_argument('--now', help='override UTC now, for testing/archival only')
     a.add_argument('--max-snapshot-hours', type=float, default=168)
     args = a.parse_args()
     if args.max_snapshot_hours <= 0:
         a.error('--max-snapshot-hours must be positive')
     now = iso_time(args.now) if args.now else None
-    # Never serialize private opportunity diagnostics to stdout or a GitHub artifact.
-    # Absence of a stable secret must fail closed; rotating it breaks issue identity.
+    # Serialize only the public projection. A stable secret preserves Issue identity.
     try:
         result = compile_opportunities(load_profiles(args.profiles), args.snapshot, now, args.max_snapshot_hours)
         public = publicize_opportunities(result, os.getenv('TELEGRAPH_BOUNTY_PUBLICATION_KEY'))
